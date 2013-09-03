@@ -1,0 +1,17 @@
+--- Type system
+	- Make normal attributes actually work
+	- Add better printing support for fancier functions
+	
+	- Add in absolute values/negatives to make printing much easier
+
+--- Parsing
+	- Write a S exp parser first
+--- Pattern matching
+	- Some kind of guarded pattern matching
+	- Backtracking?
+
+--- Compiliation/optimzations
+	- Potential compilation to custom bytecode
+	- Compilation to LINQ expressions for faster evaluation for numerical methods
+	
+--- Put this on Github
