@@ -6,13 +6,13 @@ namespace Rw
 	{
 		public readonly string Name;
 
-        private readonly int ComputedHash;
+        	private readonly int ComputedHash;
 		
 		public Symbol(string name, Kernel kernel) : base(kernel)
 		{
 			Name = name;
 
-            ComputedHash = ComputeHash();
+            		ComputedHash = ComputeHash();
 		}
 
 		public override string Head 
@@ -36,25 +36,25 @@ namespace Rw
 			return Name;
 		}
 
-        private int ComputeHash()
-        {
-            return "sym".GetHashCode() ^ Name.GetHashCode();
-        }
+		private int ComputeHash()
+		{
+            		return "sym".GetHashCode() ^ Name.GetHashCode();
+        	}		
 
-        public override int GetHashCode()
-        {
-            return ComputedHash;
-        }
-        public override bool Equals(object obj)
-        {
-            Symbol sym = obj as Symbol;
-            if (sym != null)
-            {
-                return sym.GetHashCode() == GetHashCode() &&
-                    sym.Name.Equals(Name);
-            }
-            return false;
-        }
+        	public override int GetHashCode()
+        	{
+			return ComputedHash;
+        	}
+        	public override bool Equals(object obj)
+        	{
+			Symbol sym = obj as Symbol;
+            		if (sym != null)
+	        	{
+			                return sym.GetHashCode() == GetHashCode() &&
+                   			 sym.Name.Equals(Name);
+			}
+            		return false;
+        	}
 	}
 }
 

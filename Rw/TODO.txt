@@ -1,14 +1,18 @@
 --- Type system
-	- Make normal attributes actually work
 	- Add better printing support for fancier functions
-	
-	- Add in absolute values/negatives to make printing much easier
-
+	- Define some sort of ordering for sorting orderless functions
+--- Kernel
+	- Define rules
+	- Define function attributes
+	- Expression evaluation
 --- Parsing
 	- Write a S exp parser first
+	
 --- Pattern matching
 	- Some kind of guarded pattern matching
 	- Backtracking?
+		- Finish the normal pattern matching for standard normals
+		- Finsih the normal pattern matching for flat&orderless
 
 --- Compiliation/optimzations
 	- Potential compilation to custom bytecode

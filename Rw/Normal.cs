@@ -33,7 +33,7 @@ namespace Rw
 
             if (Attributes.HasFlag(NormalAttributes.Numeric))
             {
-                IsNumeric = CalculateNumeric();
+                IsNumeric = this.All((x) => x.Numeric());
             } 
             else
             {
@@ -66,10 +66,6 @@ namespace Rw
                 }
             }
             return arguments.ToArray();
-        }
-        private bool CalculateNumeric()
-        {
-            return this.Any((x) => x.Numeric());
         }
 
         public override string Head
@@ -106,6 +102,11 @@ namespace Rw
         {
             return IsNumeric;
         }
+        public override bool Imprecise()
+        {
+            return this.Any((x) => x.Imprecise());
+        }
+
         protected virtual int ComputeHash()
         {
             int hash = Head.GetHashCode();
@@ -197,6 +198,7 @@ namespace Rw
                 yield return this[i];
             }
         }
+        // C# has really ugly syntax for this
         IEnumerator<Expression> System.Collections.Generic.IEnumerable<Expression>.GetEnumerator()
         {
             for (int i = 0; i < Length; i++)

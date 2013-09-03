@@ -10,30 +10,30 @@ namespace Rw
 		public abstract string Head { get; }
 		public abstract TypeClass Type { get; }
 
-        public readonly Kernel Kernel;
+        	public readonly Kernel Kernel;
 
-        public Expression(Kernel kernel) 
-        {
-            Kernel = kernel;
-        }
+	        public Expression(Kernel kernel) 
+        	{
+			Kernel = kernel;
+            	}
 
-        public virtual bool Negative()
-        {
-            return false;
-        }
-        public virtual Expression AsNonnegative()
-        {
-            return this;
-        }
+        	public virtual bool Negative()
+        	{
+			return false;
+        	}		
+        	public virtual Expression AsNonnegative()
+        	{
+			return this;
+        	}
 
-        public virtual bool Numeric()
-        {
-            return false;
-        }
-        public virtual bool Imprecise()
-        {
-            return false;
-        }
+        	public virtual bool Numeric()
+        	{
+			return false;
+        	}
+        	public virtual bool Imprecise()
+        	{
+			return false;
+        	}
 
 		public abstract string FullForm();
 		public virtual string PrettyForm()
@@ -46,10 +46,14 @@ namespace Rw
 			return PrettyForm();
 		}
 
-        public override bool Equals(object obj)
-        {
-            return false;
-        }
+        	public override int GetHashCode()
+        	{
+			throw new NotImplementedException();
+        	}
+        	public override bool Equals(object obj)
+        	{
+			return false;
+        	}
 	}
 }
 
