@@ -3,18 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rw", "Rw\Rw.csproj", "{808DEAA2-8156-4D5E-A4E6-C51B911B88E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rw.Console", "Rw.Console\Rw.Console.csproj", "{2ADAB528-D099-49AF-9105-DA473575A873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2ADAB528-D099-49AF-9105-DA473575A873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ADAB528-D099-49AF-9105-DA473575A873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ADAB528-D099-49AF-9105-DA473575A873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ADAB528-D099-49AF-9105-DA473575A873}.Release|Any CPU.Build.0 = Release|Any CPU
 		{808DEAA2-8156-4D5E-A4E6-C51B911B88E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{808DEAA2-8156-4D5E-A4E6-C51B911B88E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{808DEAA2-8156-4D5E-A4E6-C51B911B88E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{808DEAA2-8156-4D5E-A4E6-C51B911B88E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Rw\Rw.csproj
+		StartupItem = Rw.Console\Rw.Console.csproj
 	EndGlobalSection
 EndGlobal

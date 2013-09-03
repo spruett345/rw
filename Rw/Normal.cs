@@ -46,6 +46,7 @@ namespace Rw
         private Expression[] FlattenArguments(Expression[] args)
         {
             var arguments = new List<Expression>();
+
             foreach (var arg in args)
             {
                 if (arg.Type == TypeClass.Normal)
@@ -191,7 +192,7 @@ namespace Rw
             return bldr.ToString();
         }
 
-        public IEnumerator GetEnumerator()
+        public virtual IEnumerator GetEnumerator()
         {
             for (int i = 0; i < Length; i++)
             {
