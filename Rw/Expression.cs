@@ -2,58 +2,63 @@ using System;
 
 namespace Rw
 {
-	/// <summary>
-	/// A base class for all Expression types.
-	/// </summary>
-	public abstract class Expression
-	{
-		public abstract string Head { get; }
-		public abstract TypeClass Type { get; }
+    /// <summary>
+    /// A base class for all Expression types.
+    /// </summary>
+    public abstract class Expression
+    {
+        public abstract string Head { get; }
 
-        	public readonly Kernel Kernel;
+        public abstract TypeClass Type { get; }
 
-	        public Expression(Kernel kernel) 
-        	{
-			Kernel = kernel;
-            	}
+        public readonly Kernel Kernel;
 
-        	public virtual bool Negative()
-        	{
-			return false;
-        	}		
-        	public virtual Expression AsNonnegative()
-        	{
-			return this;
-        	}
+        public Expression(Kernel kernel)
+        {
+            Kernel = kernel;
+        }
 
-        	public virtual bool Numeric()
-        	{
-			return false;
-        	}
-        	public virtual bool Imprecise()
-        	{
-			return false;
-        	}
+        public virtual bool Negative()
+        {
+            return false;
+        }
 
-		public abstract string FullForm();
-		public virtual string PrettyForm()
-		{
-			return FullForm();
-		}
-		
-		public override string ToString()
-		{
-			return PrettyForm();
-		}
+        public virtual Expression AsNonnegative()
+        {
+            return this;
+        }
 
-        	public override int GetHashCode()
-        	{
-			throw new NotImplementedException();
-        	}
-        	public override bool Equals(object obj)
-        	{
-			return false;
-        	}
-	}
+        public virtual bool Numeric()
+        {
+            return false;
+        }
+
+        public virtual bool Imprecise()
+        {
+            return false;
+        }
+
+        public abstract string FullForm();
+
+        public virtual string PrettyForm()
+        {
+            return FullForm();
+        }
+        
+        public override string ToString()
+        {
+            return PrettyForm();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return false;
+        }
+    }
 }
 
