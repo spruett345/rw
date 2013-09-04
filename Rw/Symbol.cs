@@ -12,7 +12,7 @@ namespace Rw
             Name = name;
 
             ComputedHash = ComputeHash();
-            //Variables.Add(this);
+            Variables.Add(this);
         }
 
         public override string Head
