@@ -1,12 +1,14 @@
 --- Type system
 	- Add better printing support for fancier functions
 	- Define some sort of ordering for sorting orderless functions
+	
+	- Boolean and string types
 --- Kernel
 	- Define rules
 	- Define function attributes
 	- Expression evaluation
 --- Parsing
-	- Write a S exp parser first
+	- Define some grammar for the language
 	
 --- Pattern matching
 	- Some kind of guarded pattern matching

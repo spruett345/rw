@@ -9,7 +9,7 @@ namespace Rw.Matching
 
         }
 
-        public override bool Matches(Expression exp, Environment env)
+        public override bool Matches(Expression exp, MatchEnvironment env)
         {
             return true;
         }

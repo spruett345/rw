@@ -13,7 +13,7 @@ namespace Rw.Matching
             BasePattern = pattern;
         }
 
-        public override bool Matches(Expression exp, Environment env)
+        public override bool Matches(Expression exp, MatchEnvironment env)
         {
             Expression bound = env[Name];
             if (bound != null)

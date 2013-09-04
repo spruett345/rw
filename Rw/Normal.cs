@@ -83,7 +83,6 @@ namespace Rw
                 return TypeClass.Normal;
             }
         }
-
         public virtual int Length
         {
             get
@@ -106,6 +105,13 @@ namespace Rw
         public override bool Imprecise()
         {
             return this.Any((x) => x.Imprecise());
+        }
+
+        public override Expression Substitute(MatchEnvironment env)
+        {
+            var args = Arguments.Select((x) => x.Substitute(env));
+
+            return new Normal(FunctionHead, Kernel, args.ToArray());
         }
 
         protected virtual int ComputeHash()
@@ -192,7 +198,7 @@ namespace Rw
             return bldr.ToString();
         }
 
-        public virtual IEnumerator GetEnumerator()
+        IEnumerator System.Collections.IEnumerator.GetEnumerator()
         {
             for (int i = 0; i < Length; i++)
             {
@@ -200,7 +206,7 @@ namespace Rw
             }
         }
         // C# has really ugly syntax for this
-        IEnumerator<Expression> System.Collections.Generic.IEnumerable<Expression>.GetEnumerator()
+        public virtual IEnumerator<Expression> GetEnumerator()
         {
             for (int i = 0; i < Length; i++)
             {

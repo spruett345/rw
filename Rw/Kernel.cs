@@ -21,6 +21,11 @@ namespace Rw
             }
             return Rw.NormalAttributes.None;
         }
+
+        public Expression Evaluate(Expression exp)
+        {
+            return exp;
+        }
     }
 }
 

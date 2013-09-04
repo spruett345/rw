@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Rw.Matching
 {
-    public class Environment
+    public class MatchEnvironment
     {
         private Stack<Tuple<BoundPattern, Expression>> Bindings;
 
-        public Environment()
+        public MatchEnvironment()
         {
             Bindings = new Stack<Tuple<BoundPattern, Expression>>();
         }

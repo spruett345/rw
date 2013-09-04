@@ -30,6 +30,15 @@ namespace Rw
             }
         }
 
+        public override Expression Substitute(MatchEnvironment env)
+        {
+            if (env.ContainsKey(Name))
+            {
+                return env[Name];
+            }
+            return this;
+        }
+
         public override string FullForm()
         {
             return Name;

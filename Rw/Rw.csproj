@@ -45,11 +45,12 @@
     <Compile Include="Matching\UntypedPattern.cs" />
     <Compile Include="Matching\Pattern.cs" />
     <Compile Include="Matching\BoundPattern.cs" />
-    <Compile Include="Matching\Environment.cs" />
     <Compile Include="Matching\TypedPattern.cs" />
     <Compile Include="Matching\NormalPattern.cs" />
     <Compile Include="Kernel.cs" />
-    <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Matching\MatchEnvironment.cs" />
+    <Compile Include="Environment.cs" />
+    <Compile Include="Parsing\SExpParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

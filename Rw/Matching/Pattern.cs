@@ -8,7 +8,7 @@ namespace Rw.Matching
     /// </summary>
     public abstract class Pattern
     {
-        public abstract bool Matches(Expression exp, Environment env);
+        public abstract bool Matches(Expression exp, MatchEnvironment env);
     }
 }
 

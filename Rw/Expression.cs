@@ -38,6 +38,11 @@ namespace Rw
             return false;
         }
 
+        public virtual Expression Substitute(MatchEnvironment env)
+        {
+            return this;
+        }
+
         public abstract string FullForm();
 
         public virtual string PrettyForm()

@@ -11,7 +11,7 @@ namespace Rw.Matching
             Head = head;
         }
 
-        public override bool Matches(Expression exp, Environment env)
+        public override bool Matches(Expression exp, MatchEnvironment env)
         {
             return Head.Equals(exp.Head);
         }

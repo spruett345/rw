@@ -10,7 +10,7 @@ namespace Rw.Matching
         public NormalPattern()
         {
         }
-        public override bool Matches(Expression exp, Environment env)
+        public override bool Matches(Expression exp, MatchEnvironment env)
         {
             return false;
         }
