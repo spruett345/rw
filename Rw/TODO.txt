@@ -13,7 +13,6 @@
 --- Pattern matching
 	- Some kind of guarded pattern matching
 	- Backtracking?
-		- Finish the normal pattern matching for standard normals
 		- Finsih the normal pattern matching for flat&orderless
 
 --- Compiliation/optimzations

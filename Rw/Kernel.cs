@@ -5,7 +5,7 @@ namespace Rw
 {
     public class Kernel
     {
-        private Dictionary<string, NormalAttributes> NormalAttributes;
+        public Dictionary<string, NormalAttributes> NormalAttributes;
 
         public Kernel()
         {

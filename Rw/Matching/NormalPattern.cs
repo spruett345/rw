@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Rw.Matching
 {
@@ -6,12 +7,16 @@ namespace Rw.Matching
     {
         private readonly Pattern[] Arguments;
         private readonly string FunctionHead;
+        private readonly bool Lookahead;
 
         public NormalPattern(string head, params Pattern[] args)
         {
             FunctionHead = head;
             Arguments = args;
+
+            Lookahead = Arguments.Any((x) => x.RequiresLookahead());
         }
+
         public override bool Matches(Expression exp, MatchEnvironment env)
         {
             if (exp.Type != TypeClass.Normal)
@@ -32,20 +37,65 @@ namespace Rw.Matching
         {
             int index = 0;
             var state = env.State();
+
+            if (RequiresLookahead())
+            {
+                return MatchLookahead(norm, env);
+            }
+            else
+            {
+                foreach (var arg in norm)
+                {
+                    Pattern pat = Arguments[index];
+
+                    if (!pat.Matches(arg, env))
+                    {
+                        env.Revert(state);
+                        return false;
+                    }
+                    pat.Bind(arg, env);
+                    index++;
+                }
+                return index == Arguments.Length;
+            }
+        }
+
+        private bool MatchLookahead(Normal norm, MatchEnvironment env)
+        {
+            int index = 0;
+            var state = env.State();
             foreach (var arg in norm)
             {
                 Pattern pat = Arguments[index];
-
-                if (!pat.Matches(arg, env))
+                if (pat.BindLookahead())
                 {
-                    env.Revert(state);
-                    return false;
+                    if (!pat.Matches(arg, env))
+                    {
+                        env.Revert(state);
+                        return false;
+                    }
+                    pat.Bind(arg, env);
                 }
-                pat.Bind(arg, env);
                 index++;
             }
-            return true;
+            index = 0;
+            foreach (var arg in norm)
+            {
+                Pattern pat = Arguments[index];
+                if (!pat.BindLookahead())
+                {
+                    if (!pat.Matches(arg, env))
+                    {
+                        env.Revert(state);
+                        return false;
+                    }
+                    pat.Bind(arg, env);
+                }
+                index++;
+            }
+            return index == Arguments.Length;
         }
+
         private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env)
         {
             var collector = -1;
@@ -64,6 +114,11 @@ namespace Rw.Matching
             }
             // TODO: flat/orderless matching
             return false;
+        }
+
+        public override bool RequiresLookahead()
+        {
+            return Lookahead;
         }
     }
 }

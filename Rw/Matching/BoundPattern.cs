@@ -26,6 +26,15 @@ namespace Rw.Matching
         {
             env.Bind(Name, BasePattern, exp);
         }
+
+        public override bool RequiresLookahead()
+        {
+            return BasePattern.RequiresLookahead();
+        }
+        public override bool BindLookahead()
+        {
+            return BasePattern.BindLookahead();
+        }
     }
 }
 

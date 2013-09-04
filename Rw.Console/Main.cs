@@ -11,7 +11,8 @@ namespace Rw.Console
         public static void Main(string[] args)
         {
             Kernel kernel = new Kernel();
-            var pattern = new NormalPattern("add", new TypedPattern("sym"), new TypedPattern("int"));
+            kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
+            var pattern = new NormalPattern("add", new BoundPattern(new UntypedPattern(), "x"), new BoundPattern(new TypedPattern("num"), "x"));
             while (true)
             {
                 string line = Console.ReadLine();

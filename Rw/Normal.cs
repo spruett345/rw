@@ -22,31 +22,15 @@ namespace Rw
 
             FunctionHead = head;
 
-            if (Attributes.HasFlag(NormalAttributes.Flat))
-            {
-                Arguments = FlattenArguments(args);
-            } 
-            else
-            {
-                Arguments = args;
-            }
-
-            if (Attributes.HasFlag(NormalAttributes.Numeric))
-            {
-                IsNumeric = this.All((x) => x.Numeric());
-            } 
-            else
-            {
-                IsNumeric = false;
-            }
+            Arguments = Attributes.HasFlag(NormalAttributes.Flat) ?
+                FlattenArguments(args) : args;
+            IsNumeric = Attributes.HasFlag(NormalAttributes.Numeric) && 
+                this.All((x) => x.Numeric());
 
             ComputedHash = ComputeHash();
             foreach (var arg in Arguments)
             {
-                foreach (var sym in arg.FreeVariables())
-                {
-                   Variables.Add(sym);
-                }
+                Variables.UnionWith(arg.FreeVariables());
             }
         }
 
