@@ -22,6 +22,10 @@ namespace Rw.Matching
             }
             return BasePattern.Matches(exp, env);
         }
+        public override void Bind(Expression exp, MatchEnvironment env)
+        {
+            env.Bind(Name, BasePattern, exp);
+        }
     }
 }
 

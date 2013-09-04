@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Rw
 {
@@ -7,6 +8,8 @@ namespace Rw
     /// </summary>
     public abstract class Expression
     {
+        protected HashSet<Symbol> Variables;
+
         public abstract string Head { get; }
 
         public abstract TypeClass Type { get; }
@@ -16,6 +19,7 @@ namespace Rw
         public Expression(Kernel kernel)
         {
             Kernel = kernel;
+            Variables = new HashSet<Symbol>();
         }
 
         public virtual bool Negative()
@@ -38,9 +42,14 @@ namespace Rw
             return false;
         }
 
-        public virtual Expression Substitute(MatchEnvironment env)
+        public virtual Expression Substitute(Environment env)
         {
             return this;
+        }
+
+        public virtual ISet<Symbol> FreeVariables()
+        {
+            return Variables;
         }
 
         public abstract string FullForm();

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Rw
 {
-    public class Normal : Expression, IEnumerable, IEnumerable<Expression>
+    public class Normal : Expression, IEnumerable<Expression>
     {
         private readonly string FunctionHead;
         private readonly Expression[] Arguments;
@@ -41,6 +41,13 @@ namespace Rw
             }
 
             ComputedHash = ComputeHash();
+            foreach (var arg in Arguments)
+            {
+                foreach (var sym in arg.FreeVariables())
+                {
+                   Variables.Add(sym);
+                }
+            }
         }
 
         private Expression[] FlattenArguments(Expression[] args)
@@ -107,7 +114,7 @@ namespace Rw
             return this.Any((x) => x.Imprecise());
         }
 
-        public override Expression Substitute(MatchEnvironment env)
+        public override Expression Substitute(Environment env)
         {
             var args = Arguments.Select((x) => x.Substitute(env));
 
@@ -198,7 +205,7 @@ namespace Rw
             return bldr.ToString();
         }
 
-        IEnumerator System.Collections.IEnumerator.GetEnumerator()
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             for (int i = 0; i < Length; i++)
             {

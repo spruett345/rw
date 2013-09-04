@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Rw.Matching
 {
-    public class MatchEnvironment
+    public class MatchEnvironment : Environment
     {
         private Stack<Tuple<BoundPattern, Expression>> Bindings;
 
@@ -12,7 +12,7 @@ namespace Rw.Matching
             Bindings = new Stack<Tuple<BoundPattern, Expression>>();
         }
 
-        public virtual Expression this[string key]
+        public override Expression this[string key]
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Rw.Matching
                 return null;
             }
         }
-        public virtual bool ContainsKey(string key)
+        public override bool ContainsKey(string key)
         {
             return this[key] !=  null;
         }

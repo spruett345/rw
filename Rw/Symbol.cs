@@ -12,6 +12,7 @@ namespace Rw
             Name = name;
 
             ComputedHash = ComputeHash();
+            //Variables.Add(this);
         }
 
         public override string Head
@@ -30,7 +31,7 @@ namespace Rw
             }
         }
 
-        public override Expression Substitute(MatchEnvironment env)
+        public override Expression Substitute(Environment env)
         {
             if (env.ContainsKey(Name))
             {

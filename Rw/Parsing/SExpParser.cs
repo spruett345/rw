@@ -36,11 +36,11 @@ namespace Rw.Parsing
         {
             if (token != "(")
             {
-                if (Regex.IsMatch(token, @"(\+|-)?\d+"))
+                if (Regex.IsMatch(token, @"^(\+|-)?\d+$"))
                 {
                     return new Integer(BigInteger.Parse(token), Kernel);
                 }
-                if (Regex.IsMatch(token, @"[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?"))
+                if (Regex.IsMatch(token, @"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$"))
                 {
                     return new Decimal(decimal.Parse(token), Kernel);
                 }
@@ -54,7 +54,7 @@ namespace Rw.Parsing
 
                 var args = new List<Expression>();
                 while (next != ")")
-                {
+                {   
                     args.Add(Parse(next));
                     next = ReadToken();
                 }
@@ -75,11 +75,15 @@ namespace Rw.Parsing
                 Index++;
                 return c.ToString();
             }
-            while (Index < Input.Length && !Special.Contains(c) && !Whitespace.Contains(c))
+            while (!Special.Contains(c) && !Whitespace.Contains(c))
             {
                 retn.Append(c);
 
                 Index++;
+                if (Index >= Input.Length)
+                {
+                    break;
+                }
                 c = Input[Index];
             }
             return retn.ToString();
@@ -87,7 +91,7 @@ namespace Rw.Parsing
 
         private void ignoreWhitespace()
         {
-            while (Whitespace.Contains(Input[Index]) && Index < Input.Length)
+            while (Index < Input.Length && Whitespace.Contains(Input[Index]))
             {
                 Index++;
             }
