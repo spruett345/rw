@@ -1,8 +1,10 @@
 --- Type system
 	- Add better printing support for fancier functions
 	- Define some sort of ordering for sorting orderless functions
-	
-	- Boolean and string types
+	- Add negative/nonnegative for multiplied numbers
+	- String type
+	- Expression evaluation
+	- As imprecise values
 --- Kernel
 	- Define rules
 	- Define function attributes
@@ -12,6 +14,7 @@
 	
 --- Pattern matching
 	- Some kind of guarded pattern matching
+		- Finish this once expression eval done
 	- Lookahead based patterns
 	- Default valued pattern matching
 

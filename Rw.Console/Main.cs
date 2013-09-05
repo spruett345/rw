@@ -3,7 +3,7 @@ using System.Linq;
 using Rw;
 using Rw.Parsing;
 using Rw.Matching;
-
+using Rw.Evaluation;
 namespace Rw.Console
 {
     using Console = System.Console;
@@ -27,7 +27,8 @@ namespace Rw.Console
 
                                             new BoundPattern(new TypedPattern("num"), "k")
                                             );
-
+            var rule = new DefinedRule(pattern, (env) =>
+                                       new Normal("mul", kernel, new Normal("add", kernel, env["k"], new Integer(1, kernel)), env["x"]));
             while (true)
             {
                 string line = Console.ReadLine();
@@ -35,22 +36,16 @@ namespace Rw.Console
                 var exp = parser.Parse();
                 Console.WriteLine(exp);
                 MatchEnvironment env = new MatchEnvironment();
-                Expression matched;
-                Expression rest;
-                if (pattern.MatchesPartial(exp, env, out matched, out rest))
+                Expression applied;
+                if (rule.Apply(exp, out applied))
                 {
-                    Console.WriteLine("Matches!");
-                    Console.WriteLine("Matched -> " + matched);
-                    Console.WriteLine("Rest -> " + rest);
-                    foreach (var key in env.Keys())
-                    {
-                        Console.WriteLine(key + " -> " + env[key]);
-                    }
+                    Console.WriteLine("-> " + applied);
                 }
+                
                 int time = System.Environment.TickCount;
                 for (int i = 0; i < 10000; i++)
                 {
-                    pattern.Matches(exp, new MatchEnvironment());
+                    pattern.MatchesPartial(exp, new MatchEnvironment(), out applied, out applied);
                 }
                 Console.WriteLine(System.Environment.TickCount - time);
             }

@@ -54,6 +54,9 @@
     <Compile Include="Boolean.cs" />
     <Compile Include="Matching\GuardedPattern.cs" />
     <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Evaluation\Rule.cs" />
+    <Compile Include="Evaluation\DefinedRule.cs" />
+    <Compile Include="Matching\LiteralPattern.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,5 +65,6 @@
   <ItemGroup>
     <Folder Include="Parsing\" />
     <Folder Include="Matching\" />
+    <Folder Include="Evaluation\" />
   </ItemGroup>
 </Project>
