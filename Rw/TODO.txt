@@ -12,11 +12,10 @@
 	
 --- Pattern matching
 	- Some kind of guarded pattern matching
-	- Backtracking?
-		- Finsih the normal pattern matching for flat&orderless
+	- Lookahead based patterns
+	- Default valued pattern matching
 
 --- Compiliation/optimzations
 	- Potential compilation to custom bytecode
 	- Compilation to LINQ expressions for faster evaluation for numerical methods
-	
---- Put this on Github
+

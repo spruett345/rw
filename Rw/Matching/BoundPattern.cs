@@ -18,7 +18,7 @@ namespace Rw.Matching
             Expression bound = env[Name];
             if (bound != null)
             {
-                return exp.Equals(bound);
+                return exp.Equals(bound) && BasePattern.Matches(exp, env);
             }
             return BasePattern.Matches(exp, env);
         }

@@ -19,8 +19,12 @@ namespace Rw.Console
             Kernel kernel = new Kernel();
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
             kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;
-            var pattern = new NormalPattern("add", new BoundPattern(new TypedPattern("int"), "x"), new BoundPattern(new TypedPattern("sym"), "y"), 
+            var pattern = new NormalPattern("add", 
+                                            new BoundPattern(new UntypedPattern(), "x"),
+                                            new BoundPattern(new TypedPattern("int"), "x"), 
+                                            new BoundPattern(new TypedPattern("sym"), "y"), 
                                             new BoundPattern(new UntypedPattern(), "z"));
+
             while (true)
             {
                 string line = Console.ReadLine();
@@ -35,6 +39,12 @@ namespace Rw.Console
                     Console.WriteLine("y -> " + env["y"]);
                     Console.WriteLine("z -> " + env["z"]);
                 }
+                int time = System.Environment.TickCount;
+                for (int i = 0; i < 10000; i++)
+                {
+                    pattern.Matches(exp, env);
+                }
+                Console.WriteLine(System.Environment.TickCount - time);
             }
         }
     }

@@ -47,6 +47,10 @@ namespace Rw
         {
             return true;
         }
+        public override bool Imprecise()
+        {
+            return true;
+        }
 
         private int ComputeHash()
         {

@@ -26,6 +26,14 @@ namespace Rw.Matching
                 return null;
             }
         }
+        public override IEnumerable<string> Keys()
+        {
+            foreach (var tuple in Bindings)
+            {
+                yield return tuple.Item1.Name;
+            }
+        }
+
         public override bool ContainsKey(string key)
         {
             return this[key] !=  null;
