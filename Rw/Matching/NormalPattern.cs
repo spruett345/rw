@@ -26,10 +26,17 @@ namespace Rw.Matching
             }
 
             Normal norm = exp as Normal;
+
+            if (norm.Head != FunctionHead)
+            {
+                return false;
+            }
+
             if (norm.Attributes.HasFlag(NormalAttributes.Flat | NormalAttributes.Orderless))
             {
                 var state = env.State();
-                if (MatchesFlatOrderless(norm, env))
+                IEnumerable<Expression> leftover;
+                if (MatchesFlatOrderless(norm, env, out leftover))
                 {
                     return true;
                 }
@@ -38,6 +45,62 @@ namespace Rw.Matching
             }
 
             return MatchesNormal(norm, env);
+        }
+
+        public override bool MatchesPartial(Expression exp, MatchEnvironment env, out Expression matched, out Expression rest)
+        {
+            Normal norm = exp as Normal;
+            if (norm == null || norm.Head != FunctionHead)
+            {
+                matched = null;
+                rest = null;
+                return false;
+            }
+            if (norm.Attributes.HasFlag(NormalAttributes.Flat | NormalAttributes.Orderless))
+            {
+                IEnumerable<Expression> leftover;
+                if (MatchesFlatOrderless(norm, env, out leftover, true))
+                {
+                    if (leftover.Count() == 0)
+                    {
+                        matched = exp;
+                        rest = null;
+                        return true;
+                    }
+                    List<Expression> notMatched = new List<Expression>(leftover);
+                    List<Expression> didMatch = new List<Expression>(norm);
+                    for (int i = 0; i < didMatch.Count; i++)
+                    {
+                        if (notMatched.Contains(didMatch[i]))
+                        {
+                            notMatched.Remove(didMatch[i]);
+                            didMatch.RemoveAt(i);
+                            i--;
+                        }
+                    }
+                    if (didMatch.Count == 1)
+                    {
+                        matched = didMatch[0];
+                    }
+                    else
+                    {
+                        matched = new Normal(norm.Head, norm.Kernel, didMatch.ToArray());
+                    }
+                    if (leftover.Count() == 1)
+                    {
+                        rest = leftover.First();
+                    }
+                    else
+                    {
+                        rest = new Normal(norm.Head, norm.Kernel, leftover.ToArray());
+                    }
+                    return true;
+                }
+                matched  = null;
+                rest = null;
+                return false;
+            }
+            return base.MatchesPartial(exp, env, out matched, out rest);
         }
 
         private bool MatchesNormal(Normal norm, MatchEnvironment env)
@@ -107,7 +170,7 @@ namespace Rw.Matching
             return index == Arguments.Length;
         }
 
-        private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env, bool partial = false)
+        private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env, out IEnumerable<Expression> leftover, bool partial = false)
         {
             var collector = -1;
             for (int i = 0; i < Arguments.Length; i++)
@@ -130,7 +193,7 @@ namespace Rw.Matching
                     collector = i;
                 }
             }
-            var leftover = OrderlessMatching(norm, env, 0, collector);
+            leftover = OrderlessMatching(norm, env, 0, collector);
             if (leftover == null)
             {
                 return false;
