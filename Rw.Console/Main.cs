@@ -18,14 +18,23 @@ namespace Rw.Console
             }
             Kernel kernel = new Kernel();
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
-            var pattern = new NormalPattern("add", new BoundPattern(new UntypedPattern(), "x"), new BoundPattern(new TypedPattern("num"), "x"));
+            kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;
+            var pattern = new NormalPattern("add", new BoundPattern(new TypedPattern("int"), "x"), new BoundPattern(new TypedPattern("sym"), "y"), 
+                                            new BoundPattern(new UntypedPattern(), "z"));
             while (true)
             {
                 string line = Console.ReadLine();
                 var parser = new SExpParser(line, kernel);
                 var exp = parser.Parse();
                 Console.WriteLine(exp);
-                Console.WriteLine("Matches: " + pattern.Matches(exp, new MatchEnvironment()));
+                MatchEnvironment env = new MatchEnvironment();
+                if (pattern.Matches(exp, env))
+                {
+                    Console.WriteLine("Matches!");
+                    Console.WriteLine("x -> " + env["x"]);
+                    Console.WriteLine("y -> " + env["y"]);
+                    Console.WriteLine("z -> " + env["z"]);
+                }
             }
         }
     }

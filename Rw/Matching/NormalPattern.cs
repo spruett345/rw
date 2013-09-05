@@ -28,7 +28,13 @@ namespace Rw.Matching
             Normal norm = exp as Normal;
             if (norm.Attributes.HasFlag(NormalAttributes.Flat | NormalAttributes.Orderless))
             {
-                return MatchesFlatOrderless(norm, env);
+                var state = env.State();
+                if (MatchesFlatOrderless(norm, env))
+                {
+                    return true;
+                }
+                env.Revert(state);
+                return false;
             }
 
             return MatchesNormal(norm, env);
@@ -101,37 +107,94 @@ namespace Rw.Matching
             return index == Arguments.Length;
         }
 
-        private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env)
+        private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env, bool partial = false)
         {
             var collector = -1;
             for (int i = 0; i < Arguments.Length; i++)
             {
-                UntypedPattern untyped = Arguments[i] as UntypedPattern;
+                Pattern pat = Arguments[i];
+                BoundPattern bound = pat as BoundPattern;
+                if (bound != null)
+                {
+                    pat = bound.BasePattern;
+                }
+
+                UntypedPattern untyped = pat as UntypedPattern;
                 if (untyped != null)
                 {
                     collector = i;
                 }
-                NormalPattern same = Arguments[i] as NormalPattern;
+                NormalPattern same = pat as NormalPattern;
                 if (same != null && same.FunctionHead == norm.Head)
                 {
                     collector = i;
                 }
             }
-            // TODO: flat/orderless matching
-            return false;
+            var leftover = OrderlessMatching(norm, env, 0, collector);
+            if (leftover == null)
+            {
+                return false;
+            }
+            if (collector >= 0)
+            {
+                if (leftover.Count() == 0)
+                {
+                    return false;
+                }
+                if (leftover.Count() == 1)
+                {
+                    Arguments[collector].Bind(leftover.First(), env);
+                }
+                else
+                {
+                    Arguments[collector].Bind(new Normal(norm.Head, norm.Kernel, leftover.ToArray()), env);
+                }
+                return true;
+            }
+            
+            return partial || leftover.Count() == 0;
         }
-        private bool OrderlessMatching(IEnumerable<Expression> expressions, MatchEnvironment env, int index, int collector)
+        private IEnumerable<Expression> OrderlessMatching(IEnumerable<Expression> expressions, MatchEnvironment env, int index, int collector)
         {
             if (index == Arguments.Length)
             {
-                return true;
+                return expressions;
             }
             if (index == collector)
             {
                 return OrderlessMatching(expressions, env, index + 1, collector);
             }
             Pattern pattern = Arguments[index];
-            return true;
+
+            int i = 0;
+            foreach (var exp in expressions)
+            {
+                var state = env.State();
+                if (pattern.Matches(exp, env))
+                {
+                    pattern.Bind(exp, env);
+                    var retn = OrderlessMatching(TakeWithout(expressions, i), env, index + 1, collector);
+                    if (retn != null)
+                    {
+                        return retn;
+                    }
+                }
+                env.Revert(state);
+                i++;
+            }
+            return null;
+        }
+        private IEnumerable<Expression> TakeWithout(IEnumerable<Expression> enumerable, int index)
+        {
+            int i = 0;
+            foreach (var exp in enumerable)
+            {
+                if (i != index)
+                {
+                    yield return exp;
+                }
+                i++;
+            }
         }
 
         public override bool RequiresLookahead()
