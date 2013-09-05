@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Rw.Matching
 {
@@ -38,6 +39,10 @@ namespace Rw.Matching
             int index = 0;
             var state = env.State();
 
+            if (norm.Length != Arguments.Length)
+            {
+                return false;
+            }
             if (RequiresLookahead())
             {
                 return MatchLookahead(norm, env);
@@ -56,8 +61,8 @@ namespace Rw.Matching
                     pat.Bind(arg, env);
                     index++;
                 }
-                return index == Arguments.Length;
             }
+            return true;
         }
 
         private bool MatchLookahead(Normal norm, MatchEnvironment env)
@@ -114,6 +119,19 @@ namespace Rw.Matching
             }
             // TODO: flat/orderless matching
             return false;
+        }
+        private bool OrderlessMatching(IEnumerable<Expression> expressions, MatchEnvironment env, int index, int collector)
+        {
+            if (index == Arguments.Length)
+            {
+                return true;
+            }
+            if (index == collector)
+            {
+                return OrderlessMatching(expressions, env, index + 1, collector);
+            }
+            Pattern pattern = Arguments[index];
+            return true;
         }
 
         public override bool RequiresLookahead()

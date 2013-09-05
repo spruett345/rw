@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Rw;
 using Rw.Parsing;
 using Rw.Matching;
@@ -10,6 +11,11 @@ namespace Rw.Console
     {
         public static void Main(string[] args)
         {
+            var q = new int[] { 1, 1, 2}.Except(new int[] { 1 });
+            foreach (var a in q)
+            {
+                Console.WriteLine(a);
+            }
             Kernel kernel = new Kernel();
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
             var pattern = new NormalPattern("add", new BoundPattern(new UntypedPattern(), "x"), new BoundPattern(new TypedPattern("num"), "x"));
