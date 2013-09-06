@@ -9,12 +9,14 @@ namespace Rw
     {
         public Dictionary<string, NormalAttributes> NormalAttributes;
 
-        private Dictionary<string, List<Rule>> RuleLookup;
+        private Lookup BaseRules;
+        private Lookup UserRules;
 
         public Kernel()
         {
             NormalAttributes = new Dictionary<string, Rw.NormalAttributes>();
-            RuleLookup = new Dictionary<string, List<Rule>>();
+            BaseRules = new Lookup();
+            UserRules = new Lookup();
         }
 
         public NormalAttributes GetNormalAttributes(string head)
@@ -29,30 +31,12 @@ namespace Rw
 
         public void AddRule(string head, Rule rule)
         {
-            List<Rule> rules;
-            if (RuleLookup.TryGetValue(head, out rules))
-            {
-                rules.Add(rule);
-            }
-            else
-            {
-                rules = new List<Rule>();
-                rules.Add(rule);
-                RuleLookup.Add(head, rules);
-            }
+            BaseRules.AddRule(head, rule);
         }
-        public IEnumerable<Rule> ApplicableRules(Expression exp)
+
+        public Lookup DefaultRules()
         {
-            List<Rule> rules;
-            if (RuleLookup.TryGetValue(exp.Head, out rules))
-            {
-                return rules;
-            }
-            return new Rule[0];
-        }
-        public Expression Evaluate(Expression exp)
-        {
-            return exp;
+            return BaseRules.Union(UserRules);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Rw.Evaluation;
 
 namespace Rw
 {
@@ -109,18 +110,17 @@ namespace Rw
             return new Normal(FunctionHead, Kernel, args.ToArray());
         }
 
-        public override bool TryEvaluate(out Expression evaluated)
+        public override bool TryEvaluate(Lookup rules, out Expression evaluated)
         {
-            if (TryEvaluateInner(out evaluated))
+            if (TryEvaluateInner(rules, out evaluated))
             {
                 return true;
             }
-            return TryEvaluateOuter(out evaluated);
+            return TryEvaluateOuter(rules, out evaluated);
         }
-        private bool TryEvaluateOuter(out Expression evaluated)
+        private bool TryEvaluateOuter(Lookup rules, out Expression evaluated)
         {
-            var rules = Kernel.ApplicableRules(this);
-            foreach (var rule in rules)
+            foreach (var rule in rules.ApplicableRules(this))
             {
                 if (rule.Apply(this, out evaluated))
                 {
@@ -130,13 +130,13 @@ namespace Rw
             evaluated = null;
             return false;
         }
-        private bool TryEvaluateInner(out Expression evaluated)
+        private bool TryEvaluateInner(Lookup rules, out Expression evaluated)
         {
             var copy = this.ToArray();
             Expression arg;
             for (int i = 0; i < copy.Length; i++)
             {
-                if (copy[i].TryEvaluate(out arg))
+                if (copy[i].TryEvaluate(rules, out arg))
                 {
                     copy[i] = arg;
                     evaluated = Create(copy);
@@ -182,15 +182,7 @@ namespace Rw
             {
                 return false;
             }
-            for (int i = 0; i < Length; i++)
-            {
-                if (!this[i].Equals(norm[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return this.SequenceEqual(norm);
         }
 
         public override string FullForm()

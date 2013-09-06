@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rw.Evaluation;
 
 namespace Rw
 {
@@ -46,17 +47,21 @@ namespace Rw
         {
             return this;
         }
-        public virtual Expression Evaluate()
+        public virtual Expression Evaluate(Lookup rules = null)
         {
+            if (rules == null)
+            {
+                rules = Kernel.DefaultRules();
+            }
             Expression evaluated = this;
             Expression prev = evaluated;
-            while (prev.TryEvaluate(out evaluated))
+            while (prev.TryEvaluate(rules, out evaluated))
             {
                 prev = evaluated;
             }
             return prev;
         }
-        public virtual bool TryEvaluate(out Expression evaluated)
+        public virtual bool TryEvaluate(Lookup rules, out Expression evaluated)
         {
             evaluated = null;
             return false;

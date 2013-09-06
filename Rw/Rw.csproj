@@ -57,6 +57,10 @@
     <Compile Include="Evaluation\Rule.cs" />
     <Compile Include="Evaluation\DefinedRule.cs" />
     <Compile Include="Matching\LiteralPattern.cs" />
+    <Compile Include="Evaluation\Lookup.cs" />
+    <Compile Include="Evaluation\LookupUnion.cs" />
+    <Compile Include="Bind.cs" />
+    <Compile Include="SubstitutionEnvironment.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
