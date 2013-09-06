@@ -27,6 +27,20 @@ namespace Rw
             return Rw.NormalAttributes.None;
         }
 
+        public void AddRule(string head, Rule rule)
+        {
+            List<Rule> rules;
+            if (RuleLookup.TryGetValue(head, out rules))
+            {
+                rules.Add(rule);
+            }
+            else
+            {
+                rules = new List<Rule>();
+                rules.Add(rule);
+                RuleLookup.Add(head, rules);
+            }
+        }
         public IEnumerable<Rule> ApplicableRules(Expression exp)
         {
             List<Rule> rules;

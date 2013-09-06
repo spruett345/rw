@@ -68,6 +68,7 @@ namespace Rw.Parsing
             ignoreWhitespace();
 
             StringBuilder retn = new StringBuilder();
+
             char c = Input[Index];
 
             if (Special.Contains(c))

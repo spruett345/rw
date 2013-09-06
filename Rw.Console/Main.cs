@@ -21,14 +21,11 @@ namespace Rw.Console
             kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;
             kernel.NormalAttributes["mul"] = NormalAttributes.Flat | NormalAttributes.Orderless;
             var pattern = new NormalPattern("add",
-                                            new NormalPattern("mul", 
-                                                new BoundPattern(new TypedPattern("num"), "k"), 
-                                                new BoundPattern(new TypedPattern("sym"), "x")),
-
-                                            new BoundPattern(new TypedPattern("num"), "k")
+                                            new BoundPattern(new TypedPattern("int"), "x"),
+                                            new BoundPattern(new TypedPattern("int"), "y")
                                             );
-            var rule = new DefinedRule(pattern, (env) =>
-                                       new Normal("mul", kernel, new Normal("add", kernel, env["k"], new Integer(1, kernel)), env["x"]));
+            var rule = new DefinedRule(pattern, (env) => new Integer((env["x"] as Integer).Value + (env["y"] as Integer).Value, kernel));
+            kernel.AddRule("add", rule);
             while (true)
             {
                 string line = Console.ReadLine();
@@ -37,15 +34,12 @@ namespace Rw.Console
                 Console.WriteLine(exp);
                 MatchEnvironment env = new MatchEnvironment();
                 Expression applied;
-                if (rule.Apply(exp, out applied))
-                {
-                    Console.WriteLine("-> " + applied);
-                }
+                Console.WriteLine("-> " + exp.Evaluate());
                 
                 int time = System.Environment.TickCount;
                 for (int i = 0; i < 10000; i++)
                 {
-                    pattern.MatchesPartial(exp, new MatchEnvironment(), out applied, out applied);
+                    exp.Evaluate();
                 }
                 Console.WriteLine(System.Environment.TickCount - time);
             }

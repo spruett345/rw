@@ -46,6 +46,21 @@ namespace Rw
         {
             return this;
         }
+        public virtual Expression Evaluate()
+        {
+            Expression evaluated = this;
+            Expression prev = evaluated;
+            while (prev.TryEvaluate(out evaluated))
+            {
+                prev = evaluated;
+            }
+            return prev;
+        }
+        public virtual bool TryEvaluate(out Expression evaluated)
+        {
+            evaluated = null;
+            return false;
+        }
 
         public virtual ISet<Symbol> FreeVariables()
         {

@@ -98,6 +98,10 @@ namespace Rw
             return this.Any((x) => x.Imprecise());
         }
 
+        public virtual Normal Create(params Expression[] args)
+        {
+            return new Normal(FunctionHead, Kernel, args);
+        }
         public override Expression Substitute(Environment env)
         {
             var args = Arguments.Select((x) => x.Substitute(env));
@@ -105,6 +109,43 @@ namespace Rw
             return new Normal(FunctionHead, Kernel, args.ToArray());
         }
 
+        public override bool TryEvaluate(out Expression evaluated)
+        {
+            if (TryEvaluateInner(out evaluated))
+            {
+                return true;
+            }
+            return TryEvaluateOuter(out evaluated);
+        }
+        private bool TryEvaluateOuter(out Expression evaluated)
+        {
+            var rules = Kernel.ApplicableRules(this);
+            foreach (var rule in rules)
+            {
+                if (rule.Apply(this, out evaluated))
+                {
+                    return true;
+                }
+            }
+            evaluated = null;
+            return false;
+        }
+        private bool TryEvaluateInner(out Expression evaluated)
+        {
+            var copy = this.ToArray();
+            Expression arg;
+            for (int i = 0; i < copy.Length; i++)
+            {
+                if (copy[i].TryEvaluate(out arg))
+                {
+                    copy[i] = arg;
+                    evaluated = Create(copy);
+                    return true;
+                }
+            }
+            evaluated = null;
+            return false;
+        }
         protected virtual int ComputeHash()
         {
             int hash = Head.GetHashCode();

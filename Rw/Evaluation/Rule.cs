@@ -29,7 +29,7 @@ namespace Rw.Evaluation
                     return true;
                 }
                 Normal norm = match as Normal;
-                result = new Normal(norm.Head, norm.Kernel, matched, rest);
+                result = norm.Create(matched, rest);
                 return true;
             }
             result = null;

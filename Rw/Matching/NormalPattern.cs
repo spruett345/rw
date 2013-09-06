@@ -46,7 +46,6 @@ namespace Rw.Matching
 
             return MatchesNormal(norm, env);
         }
-
         public override bool MatchesPartial(Expression exp, MatchEnvironment env, out Expression matched, out Expression rest)
         {
             Normal norm = exp as Normal;
@@ -78,22 +77,9 @@ namespace Rw.Matching
                             i--;
                         }
                     }
-                    if (didMatch.Count == 1)
-                    {
-                        matched = didMatch[0];
-                    }
-                    else
-                    {
-                        matched = new Normal(norm.Head, norm.Kernel, didMatch.ToArray());
-                    }
-                    if (leftover.Count() == 1)
-                    {
-                        rest = leftover.First();
-                    }
-                    else
-                    {
-                        rest = new Normal(norm.Head, norm.Kernel, leftover.ToArray());
-                    }
+                    matched = didMatch.Count == 1 ? didMatch[0] : norm.Create(didMatch.ToArray());
+                    rest = leftover.Count() == 1 ? leftover.First() : norm.Create(leftover.ToArray());
+
                     return true;
                 }
                 matched  = null;
@@ -172,27 +158,7 @@ namespace Rw.Matching
 
         private bool MatchesFlatOrderless(Normal norm, MatchEnvironment env, out IEnumerable<Expression> leftover, bool partial = false)
         {
-            var collector = -1;
-            for (int i = 0; i < Arguments.Length; i++)
-            {
-                Pattern pat = Arguments[i];
-                BoundPattern bound = pat as BoundPattern;
-                if (bound != null)
-                {
-                    pat = bound.BasePattern;
-                }
-
-                UntypedPattern untyped = pat as UntypedPattern;
-                if (untyped != null)
-                {
-                    collector = i;
-                }
-                NormalPattern same = pat as NormalPattern;
-                if (same != null && same.FunctionHead == norm.Head)
-                {
-                    collector = i;
-                }
-            }
+            var collector = FindCollector();
             leftover = OrderlessMatching(norm, env, 0, collector);
             if (leftover == null)
             {
@@ -210,7 +176,7 @@ namespace Rw.Matching
                 }
                 else
                 {
-                    Arguments[collector].Bind(new Normal(norm.Head, norm.Kernel, leftover.ToArray()), env);
+                    Arguments[collector].Bind(norm.Create(leftover.ToArray()), env);
                 }
                 return true;
             }
@@ -258,6 +224,31 @@ namespace Rw.Matching
                 }
                 i++;
             }
+        }
+        private int FindCollector()
+        {
+            var collector = -1;
+            for (int i = 0; i < Arguments.Length; i++)
+            {
+                Pattern pat = Arguments[i];
+                BoundPattern bound = pat as BoundPattern;
+                if (bound != null)
+                {
+                    pat = bound.BasePattern;
+                }
+
+                UntypedPattern untyped = pat as UntypedPattern;
+                if (untyped != null)
+                {
+                    collector = i;
+                }
+                NormalPattern same = pat as NormalPattern;
+                if (same != null && same.FunctionHead == FunctionHead)
+                {
+                    collector = i;
+                }
+            }
+            return collector;
         }
 
         public override bool RequiresLookahead()
