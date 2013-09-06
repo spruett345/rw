@@ -17,7 +17,13 @@ namespace Rw.Matching
         {
             if (BasePattern.Matches(exp, env))
             {
-                // evaluate expression
+                var eval = Condition.Substitute(env).Evaluate();
+                Boolean b = eval as Boolean;
+                if (b != null)
+                {
+                    return b.Value;
+                }
+                return false;
             }
             return false;
         }

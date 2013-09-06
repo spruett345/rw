@@ -3,12 +3,10 @@
 	- Define some sort of ordering for sorting orderless functions
 	- Add negative/nonnegative for multiplied numbers
 	- String type
-	- Expression evaluation
 	- As imprecise values
 --- Kernel
-	- Define rules
-	- Define function attributes
-	- Expression evaluation
+	- Set some protection on base functions
+	- Work with parser to evaluate programs/scripts
 --- Parsing
 	- Define some grammar for the language
 	
