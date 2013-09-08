@@ -24,7 +24,13 @@ namespace Rw.Console
                                             new BoundPattern(new TypedPattern("int"), "x"),
                                             new BoundPattern(new TypedPattern("int"), "y")
                                             );
+            var mulpattern = new NormalPattern("mul",
+                                               new BoundPattern(new TypedPattern("int"), "x"),
+                                               new BoundPattern(new TypedPattern("int"), "y")
+                                               );
             var rule = new DefinedRule(pattern, (env) => new Integer((env["x"] as Integer).Value + (env["y"] as Integer).Value, kernel));
+            var rule2 = new DefinedRule(mulpattern, (env) => new Integer((env["x"] as Integer).Value * (env["y"] as Integer).Value, kernel));
+            kernel.AddRule("mul", rule2);
             kernel.AddRule("add", rule);
             while (true)
             {
