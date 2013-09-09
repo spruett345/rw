@@ -61,6 +61,9 @@
     <Compile Include="Evaluation\LookupUnion.cs" />
     <Compile Include="Bind.cs" />
     <Compile Include="SubstitutionEnvironment.cs" />
+    <Compile Include="Matching\ConstantPattern.cs" />
+    <Compile Include="Matching\DependsOnPattern.cs" />
+    <Compile Include="Parsing\Token.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

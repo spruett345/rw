@@ -44,6 +44,11 @@ namespace Rw
             return true;
         }
 
+        public override Expression AsImprecise()
+        {
+            return new Decimal((decimal)Value, Kernel);
+        }
+
         public override string FullForm()
         {
             return Value.ToString();

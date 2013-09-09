@@ -27,6 +27,20 @@ namespace Rw.Matching
             }
             return false;
         }
+        public override bool MatchesPartial(Expression exp, MatchEnvironment env, out Expression matched, out Expression rest)
+        {
+            if (BasePattern.MatchesPartial(exp, env, out matched, out rest))
+            {
+                var eval = Condition.Substitute(env).Evaluate();
+                Boolean b = eval as Boolean;
+                if (b != null)
+                {
+                    return b.Value;
+                }
+                return false;
+            }
+            return false;
+        }
     }
 }
 

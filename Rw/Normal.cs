@@ -98,6 +98,10 @@ namespace Rw
         {
             return this.Any((x) => x.Imprecise());
         }
+        public override Expression AsImprecise()
+        {
+            return Create(this.Select((x) => x.AsImprecise()).ToArray());
+        }
 
         public virtual Normal Create(params Expression[] args)
         {

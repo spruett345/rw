@@ -32,6 +32,10 @@ namespace Rw.Console
             var rule2 = new DefinedRule(mulpattern, (env) => new Integer((env["x"] as Integer).Value * (env["y"] as Integer).Value, kernel));
             kernel.AddRule("mul", rule2);
             kernel.AddRule("add", rule);
+
+            var lahead = new NormalPattern("d", new ConstantPattern("x"), new BoundPattern(new TypedPattern("sym"), "x"));
+            var lrule = new DefinedRule(lahead, (env) => new Integer(0, kernel));
+            kernel.AddRule("d", lrule);
             while (true)
             {
                 string line = Console.ReadLine();

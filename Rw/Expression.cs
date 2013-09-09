@@ -42,6 +42,10 @@ namespace Rw
         {
             return false;
         }
+        public virtual Expression AsImprecise()
+        {
+            return this;
+        }
 
         public virtual Expression Substitute(Environment env)
         {
@@ -54,6 +58,10 @@ namespace Rw
                 rules = Kernel.DefaultRules();
             }
             Expression evaluated = this;
+            if (evaluated.Imprecise())
+            {
+                evaluated = evaluated.AsImprecise();
+            }
             Expression prev = evaluated;
             while (prev.TryEvaluate(rules, out evaluated))
             {
