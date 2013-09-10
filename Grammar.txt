@@ -15,23 +15,29 @@ PLUS = "+"
 MINUS = "-"
 STAR = "*"
 SLASH = "/"
+CARET = "^"
+
 BACK_SLASH = "\"
 LPAR = "("
 RPAR = ")"
 COMMA = ","
 SEMICOLON = ";"
+
 COLON = ":"
 
-LET = "let"
-IN = "in"
-DEF = "def"
-WHERE = "where"
-IF = "if"
-THEN = "then"
-ELSE = "else"
+DEFEQ = ":="
+YIELD = "->"
 
-AND = "and"
-OR = "or"
+LET = "let "
+IN = "in "
+DEF = "def "
+WHERE = "where "
+IF = "if "
+THEN = "then "
+ELSE = "else "
+
+AND = "and "
+OR = "or "
 
 GTE = ">="
 LTE = "<="
@@ -40,15 +46,16 @@ GT = ">"
 LT = "<"
 
 NUMBER = <<((\+|-)?\d+)|([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+))>>
-IDENTIFIER = <<[a-z][A-Z_?]*>>
+IDENTIFIER = <<[a-z_][a-zA-Z_?]*>>
 WHITESPACE = <<[ \t\n\r]+>> %ignore%
 
 
 %productions%
 
-ComplexExpression = Expression | LetExpression | IfExpression;
+Program = (ComplexExpression | PatternDefinition)+;
 
-TypedPattern = IDENTIFIER COLON IDENTIFIER;
+PatternDefinition = DEF Expression [WHERE ComplexExpression] DEFEQ Expression;
+ComplexExpression = Expression | LetExpression | IfExpression;
 
 Expression = BooleanExpression;
 
@@ -70,10 +77,14 @@ CompExpressionTail = GTE CompExpression | LTE CompExpression | EQ CompExpression
 ArithExpression = Term [ArithExpressionTail];
 ArithExpressionTail = PLUS Expression | MINUS Expression;
 
-Term = Factor [TermTail];
+Term = PowExpression [TermTail];
      
-TermTail = [STAR] Term | SLASH Term;
+TermTail = STAR Expression | SLASH Expression;
 
-Factor = Atom | LPAR Expression RPAR | MINUS Factor | FunctionExpression;
+PowExpression = Factor [PowTail];
+PowTail = CARET Expression;
+
+Factor = Atom | LPAR Expression RPAR | MINUS Expression | FunctionExpression | IDENTIFIER TypeTail;
 
 Atom = NUMBER | IDENTIFIER;
+TypeTail = COLON IDENTIFIER [LPAR IDENTIFIER (COMMA IDENTIFIER)* RPAR];

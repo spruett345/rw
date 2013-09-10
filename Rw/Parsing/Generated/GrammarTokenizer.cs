@@ -64,6 +64,12 @@ namespace Rw.Parsing.Generated {
                                        "/");
             AddPattern(pattern);
 
+            pattern = new TokenPattern((int) GrammarConstants.CARET,
+                                       "CARET",
+                                       TokenPattern.PatternType.STRING,
+                                       "^");
+            AddPattern(pattern);
+
             pattern = new TokenPattern((int) GrammarConstants.BACK_SLASH,
                                        "BACK_SLASH",
                                        TokenPattern.PatternType.STRING,
@@ -100,58 +106,70 @@ namespace Rw.Parsing.Generated {
                                        ":");
             AddPattern(pattern);
 
+            pattern = new TokenPattern((int) GrammarConstants.DEFEQ,
+                                       "DEFEQ",
+                                       TokenPattern.PatternType.STRING,
+                                       ":=");
+            AddPattern(pattern);
+
+            pattern = new TokenPattern((int) GrammarConstants.YIELD,
+                                       "YIELD",
+                                       TokenPattern.PatternType.STRING,
+                                       "->");
+            AddPattern(pattern);
+
             pattern = new TokenPattern((int) GrammarConstants.LET,
                                        "LET",
                                        TokenPattern.PatternType.STRING,
-                                       "let");
+                                       "let ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.IN,
                                        "IN",
                                        TokenPattern.PatternType.STRING,
-                                       "in");
+                                       "in ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.DEF,
                                        "DEF",
                                        TokenPattern.PatternType.STRING,
-                                       "def");
+                                       "def ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.WHERE,
                                        "WHERE",
                                        TokenPattern.PatternType.STRING,
-                                       "where");
+                                       "where ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.IF,
                                        "IF",
                                        TokenPattern.PatternType.STRING,
-                                       "if");
+                                       "if ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.THEN,
                                        "THEN",
                                        TokenPattern.PatternType.STRING,
-                                       "then");
+                                       "then ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.ELSE,
                                        "ELSE",
                                        TokenPattern.PatternType.STRING,
-                                       "else");
+                                       "else ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.AND,
                                        "AND",
                                        TokenPattern.PatternType.STRING,
-                                       "and");
+                                       "and ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.OR,
                                        "OR",
                                        TokenPattern.PatternType.STRING,
-                                       "or");
+                                       "or ");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.GTE,
@@ -193,7 +211,7 @@ namespace Rw.Parsing.Generated {
             pattern = new TokenPattern((int) GrammarConstants.IDENTIFIER,
                                        "IDENTIFIER",
                                        TokenPattern.PatternType.REGEXP,
-                                       "[a-z][A-Z_?]*");
+                                       "[a-z_][a-zA-Z_?]*");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.WHITESPACE,

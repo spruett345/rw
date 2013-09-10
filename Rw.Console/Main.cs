@@ -11,7 +11,10 @@ namespace Rw.Console
     {
         public static void Main(string[] args)
         {
+            
             Kernel kernel = new Kernel();
+            Parser p = new Parser("let x = 1 in x * y", kernel);
+            p.ParseProgram();
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
             kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;
             kernel.NormalAttributes["mul"] = NormalAttributes.Flat | NormalAttributes.Orderless;

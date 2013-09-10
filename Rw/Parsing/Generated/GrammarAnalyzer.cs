@@ -36,6 +36,9 @@ namespace Rw.Parsing.Generated {
             case (int) GrammarConstants.SLASH:
                 EnterSlash((Token) node);
                 break;
+            case (int) GrammarConstants.CARET:
+                EnterCaret((Token) node);
+                break;
             case (int) GrammarConstants.BACK_SLASH:
                 EnterBackSlash((Token) node);
                 break;
@@ -53,6 +56,12 @@ namespace Rw.Parsing.Generated {
                 break;
             case (int) GrammarConstants.COLON:
                 EnterColon((Token) node);
+                break;
+            case (int) GrammarConstants.DEFEQ:
+                EnterDefeq((Token) node);
+                break;
+            case (int) GrammarConstants.YIELD:
+                EnterYield((Token) node);
                 break;
             case (int) GrammarConstants.LET:
                 EnterLet((Token) node);
@@ -102,6 +111,12 @@ namespace Rw.Parsing.Generated {
             case (int) GrammarConstants.IDENTIFIER:
                 EnterIdentifier((Token) node);
                 break;
+            case (int) GrammarConstants.PROGRAM:
+                EnterProgram((Production) node);
+                break;
+            case (int) GrammarConstants.PATTERN_DEFINITION:
+                EnterPatternDefinition((Production) node);
+                break;
             case (int) GrammarConstants.COMPLEX_EXPRESSION:
                 EnterComplexExpression((Production) node);
                 break;
@@ -147,11 +162,20 @@ namespace Rw.Parsing.Generated {
             case (int) GrammarConstants.TERM_TAIL:
                 EnterTermTail((Production) node);
                 break;
+            case (int) GrammarConstants.POW_EXPRESSION:
+                EnterPowExpression((Production) node);
+                break;
+            case (int) GrammarConstants.POW_TAIL:
+                EnterPowTail((Production) node);
+                break;
             case (int) GrammarConstants.FACTOR:
                 EnterFactor((Production) node);
                 break;
             case (int) GrammarConstants.ATOM:
                 EnterAtom((Production) node);
+                break;
+            case (int) GrammarConstants.TYPE_TAIL:
+                EnterTypeTail((Production) node);
                 break;
             }
         }
@@ -177,6 +201,8 @@ namespace Rw.Parsing.Generated {
                 return ExitStar((Token) node);
             case (int) GrammarConstants.SLASH:
                 return ExitSlash((Token) node);
+            case (int) GrammarConstants.CARET:
+                return ExitCaret((Token) node);
             case (int) GrammarConstants.BACK_SLASH:
                 return ExitBackSlash((Token) node);
             case (int) GrammarConstants.LPAR:
@@ -189,6 +215,10 @@ namespace Rw.Parsing.Generated {
                 return ExitSemicolon((Token) node);
             case (int) GrammarConstants.COLON:
                 return ExitColon((Token) node);
+            case (int) GrammarConstants.DEFEQ:
+                return ExitDefeq((Token) node);
+            case (int) GrammarConstants.YIELD:
+                return ExitYield((Token) node);
             case (int) GrammarConstants.LET:
                 return ExitLet((Token) node);
             case (int) GrammarConstants.IN:
@@ -221,6 +251,10 @@ namespace Rw.Parsing.Generated {
                 return ExitNumber((Token) node);
             case (int) GrammarConstants.IDENTIFIER:
                 return ExitIdentifier((Token) node);
+            case (int) GrammarConstants.PROGRAM:
+                return ExitProgram((Production) node);
+            case (int) GrammarConstants.PATTERN_DEFINITION:
+                return ExitPatternDefinition((Production) node);
             case (int) GrammarConstants.COMPLEX_EXPRESSION:
                 return ExitComplexExpression((Production) node);
             case (int) GrammarConstants.EXPRESSION:
@@ -251,10 +285,16 @@ namespace Rw.Parsing.Generated {
                 return ExitTerm((Production) node);
             case (int) GrammarConstants.TERM_TAIL:
                 return ExitTermTail((Production) node);
+            case (int) GrammarConstants.POW_EXPRESSION:
+                return ExitPowExpression((Production) node);
+            case (int) GrammarConstants.POW_TAIL:
+                return ExitPowTail((Production) node);
             case (int) GrammarConstants.FACTOR:
                 return ExitFactor((Production) node);
             case (int) GrammarConstants.ATOM:
                 return ExitAtom((Production) node);
+            case (int) GrammarConstants.TYPE_TAIL:
+                return ExitTypeTail((Production) node);
             }
             return node;
         }
@@ -271,6 +311,12 @@ namespace Rw.Parsing.Generated {
          */
         public override void Child(Production node, Node child) {
             switch (node.Id) {
+            case (int) GrammarConstants.PROGRAM:
+                ChildProgram(node, child);
+                break;
+            case (int) GrammarConstants.PATTERN_DEFINITION:
+                ChildPatternDefinition(node, child);
+                break;
             case (int) GrammarConstants.COMPLEX_EXPRESSION:
                 ChildComplexExpression(node, child);
                 break;
@@ -316,11 +362,20 @@ namespace Rw.Parsing.Generated {
             case (int) GrammarConstants.TERM_TAIL:
                 ChildTermTail(node, child);
                 break;
+            case (int) GrammarConstants.POW_EXPRESSION:
+                ChildPowExpression(node, child);
+                break;
+            case (int) GrammarConstants.POW_TAIL:
+                ChildPowTail(node, child);
+                break;
             case (int) GrammarConstants.FACTOR:
                 ChildFactor(node, child);
                 break;
             case (int) GrammarConstants.ATOM:
                 ChildAtom(node, child);
+                break;
+            case (int) GrammarConstants.TYPE_TAIL:
+                ChildTypeTail(node, child);
                 break;
             }
         }
@@ -426,6 +481,32 @@ namespace Rw.Parsing.Generated {
          * discovered errors</exception>
          */
         public virtual Node ExitSlash(Token node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterCaret(Token node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitCaret(Token node) {
             return node;
         }
 
@@ -582,6 +663,58 @@ namespace Rw.Parsing.Generated {
          * discovered errors</exception>
          */
         public virtual Node ExitColon(Token node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterDefeq(Token node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitDefeq(Token node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterYield(Token node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitYield(Token node) {
             return node;
         }
 
@@ -999,6 +1132,86 @@ namespace Rw.Parsing.Generated {
          */
         public virtual Node ExitIdentifier(Token node) {
             return node;
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterProgram(Production node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitProgram(Production node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when adding a child to a parse tree
+         * node.</summary>
+         *
+         * <param name='node'>the parent node</param>
+         * <param name='child'>the child node, or null</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void ChildProgram(Production node, Node child) {
+            node.AddChild(child);
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterPatternDefinition(Production node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitPatternDefinition(Production node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when adding a child to a parse tree
+         * node.</summary>
+         *
+         * <param name='node'>the parent node</param>
+         * <param name='child'>the child node, or null</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void ChildPatternDefinition(Production node, Node child) {
+            node.AddChild(child);
         }
 
         /**
@@ -1609,6 +1822,86 @@ namespace Rw.Parsing.Generated {
          * <exception cref='ParseException'>if the node analysis
          * discovered errors</exception>
          */
+        public virtual void EnterPowExpression(Production node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitPowExpression(Production node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when adding a child to a parse tree
+         * node.</summary>
+         *
+         * <param name='node'>the parent node</param>
+         * <param name='child'>the child node, or null</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void ChildPowExpression(Production node, Node child) {
+            node.AddChild(child);
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterPowTail(Production node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitPowTail(Production node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when adding a child to a parse tree
+         * node.</summary>
+         *
+         * <param name='node'>the parent node</param>
+         * <param name='child'>the child node, or null</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void ChildPowTail(Production node, Node child) {
+            node.AddChild(child);
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
         public virtual void EnterFactor(Production node) {
         }
 
@@ -1678,6 +1971,46 @@ namespace Rw.Parsing.Generated {
          * discovered errors</exception>
          */
         public virtual void ChildAtom(Production node, Node child) {
+            node.AddChild(child);
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterTypeTail(Production node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitTypeTail(Production node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when adding a child to a parse tree
+         * node.</summary>
+         *
+         * <param name='node'>the parent node</param>
+         * <param name='child'>the child node, or null</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void ChildTypeTail(Production node, Node child) {
             node.AddChild(child);
         }
     }
