@@ -31,10 +31,6 @@ namespace Rw.Matching
         {
             return BasePattern.RequiresLookahead();
         }
-        public override bool BindLookahead()
-        {
-            return BasePattern.BindLookahead();
-        }
     }
 }
 

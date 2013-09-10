@@ -69,6 +69,11 @@ namespace Rw
                 return dec.GetHashCode() == GetHashCode()
                     && dec.Value == Value;
             }
+            Integer i = obj as Integer;
+            if (i != null)
+            {
+                return i.Equals(this);
+            }
             return false;
         }
     }

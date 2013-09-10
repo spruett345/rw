@@ -32,6 +32,9 @@
     <Reference Include="System" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Core" />
+    <Reference Include="grammatica-1.5">
+      <HintPath>..\..\Downloads\grammatica-1.5\lib\grammatica-1.5.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -53,7 +56,6 @@
     <Compile Include="Parsing\SExpParser.cs" />
     <Compile Include="Boolean.cs" />
     <Compile Include="Matching\GuardedPattern.cs" />
-    <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Evaluation\Rule.cs" />
     <Compile Include="Evaluation\DefinedRule.cs" />
     <Compile Include="Matching\LiteralPattern.cs" />
@@ -63,15 +65,16 @@
     <Compile Include="SubstitutionEnvironment.cs" />
     <Compile Include="Matching\ConstantPattern.cs" />
     <Compile Include="Matching\DependsOnPattern.cs" />
-    <Compile Include="Parsing\Token.cs" />
+    <Compile Include="Parsing\Generated\GrammarTokenizer.cs" />
+    <Compile Include="Parsing\Generated\GrammarParser.cs" />
+    <Compile Include="Parsing\Generated\GrammarConstants.cs" />
+    <Compile Include="Parsing\Generated\GrammarAnalyzer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="TODO.txt" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Parsing\" />
     <Folder Include="Matching\" />
     <Folder Include="Evaluation\" />
+    <Folder Include="Parsing\Generated\" />
   </ItemGroup>
 </Project>

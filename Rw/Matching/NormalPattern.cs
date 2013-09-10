@@ -127,7 +127,7 @@ namespace Rw.Matching
             foreach (var arg in norm)
             {
                 Pattern pat = Arguments[index];
-                if (pat.BindLookahead())
+                if (!pat.RequiresLookahead())
                 {
                     if (!pat.Matches(arg, env))
                     {
@@ -142,7 +142,7 @@ namespace Rw.Matching
             foreach (var arg in norm)
             {
                 Pattern pat = Arguments[index];
-                if (!pat.BindLookahead())
+                if (pat.RequiresLookahead())
                 {
                     if (!pat.Matches(arg, env))
                     {

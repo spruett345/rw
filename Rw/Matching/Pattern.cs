@@ -30,10 +30,6 @@ namespace Rw.Matching
         {
             return false;
         }
-        public virtual bool BindLookahead()
-        {
-            return false;
-        }
     }
 }
 

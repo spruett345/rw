@@ -1,0 +1,77 @@
+%header%
+
+GRAMMARTYPE = "LL"
+
+DESCRIPTION = "A grammar for the Rw language."
+
+AUTHOR      = "Scott Pruett"
+VERSION     = "1.0"
+DATE        = "9 September, 2013"
+
+
+%tokens%
+
+PLUS = "+"
+MINUS = "-"
+STAR = "*"
+SLASH = "/"
+BACK_SLASH = "\"
+LPAR = "("
+RPAR = ")"
+COMMA = ","
+SEMICOLON = ";"
+COLON = ":"
+
+LET = "let"
+IN = "in"
+DEF = "def"
+WHERE = "where"
+IF = "if"
+THEN = "then"
+ELSE = "else"
+
+AND = "and"
+OR = "or"
+
+GTE = ">="
+LTE = "<="
+EQ = "="
+GT = ">"
+LT = "<"
+
+NUMBER = <<((\+|-)?\d+)|([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+))>>
+IDENTIFIER = <<[a-z][A-Z_?]*>>
+WHITESPACE = <<[ \t\n\r]+>> %ignore%
+
+
+%productions%
+
+ComplexExpression = Expression | LetExpression | IfExpression;
+
+Expression = BooleanExpression;
+
+LetExpression = LET IDENTIFIER EQ ComplexExpression (LetList)* IN ComplexExpression;
+LetList = COMMA IDENTIFIER EQ ComplexExpression;
+
+IfExpression = IF Expression THEN Expression ELSE Expression;
+
+FunctionExpression = IDENTIFIER LPAR [ArgumentList] RPAR;
+ArgumentList = Expression (COMMA Expression)*;
+
+BooleanExpression = CompExpression [BooleanExpressionTail];
+BooleanExpressionTail = AND BooleanExpression | OR BooleanExpression;
+
+CompExpression = ArithExpression [CompExpressionTail];
+CompExpressionTail = GTE CompExpression | LTE CompExpression | EQ CompExpression 
+						| GT CompExpression | LT CompExpression;
+
+ArithExpression = Term [ArithExpressionTail];
+ArithExpressionTail = PLUS Expression | MINUS Expression;
+
+Term = Factor [TermTail];
+     
+TermTail = [STAR] Term | SLASH Term;
+
+Factor = Atom | LPAR Expression RPAR | MINUS Factor | FunctionExpression;
+
+Atom = NUMBER | IDENTIFIER;

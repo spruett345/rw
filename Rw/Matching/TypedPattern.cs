@@ -19,11 +19,6 @@ namespace Rw.Matching
             }
             return Head.Equals(exp.Head);
         }
-
-        public override bool BindLookahead()
-        {
-            return Head == "sym";
-        }
     }
 }
 

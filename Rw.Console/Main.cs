@@ -33,7 +33,7 @@ namespace Rw.Console
             kernel.AddRule("mul", rule2);
             kernel.AddRule("add", rule);
 
-            var lahead = new NormalPattern("d", new ConstantPattern("x"), new BoundPattern(new TypedPattern("sym"), "x"));
+            var lahead = new NormalPattern("d", new ConstantPattern("x"), new BoundPattern(new UntypedPattern(), "x"));
             var lrule = new DefinedRule(lahead, (env) => new Integer(0, kernel));
             kernel.AddRule("d", lrule);
             while (true)

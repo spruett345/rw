@@ -46,7 +46,14 @@ namespace Rw
 
         public override Expression AsImprecise()
         {
-            return new Decimal((decimal)Value, Kernel);
+            try
+            {
+                return new Decimal((decimal)Value, Kernel);
+            } 
+            catch (OverflowException overflow)
+            {
+                return new Decimal(decimal.MaxValue, Kernel);
+            }
         }
 
         public override string FullForm()
@@ -70,6 +77,18 @@ namespace Rw
             {
                 return i.GetHashCode() == GetHashCode() &&
                     i.Value.Equals(Value);
+            }
+            Decimal d = obj as Decimal;
+            if (d != null)
+            {
+                try
+                {
+                    return d.Value == (decimal)Value;
+                }
+                catch (OverflowException overflow)
+                {
+                    return false;
+                }
             }
             return false;
         }
