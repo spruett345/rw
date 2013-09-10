@@ -11,11 +11,6 @@ namespace Rw.Console
     {
         public static void Main(string[] args)
         {
-            var q = new int[] { 1, 1, 2}.Except(new int[] { 1 });
-            foreach (var a in q)
-            {
-                Console.WriteLine(a);
-            }
             Kernel kernel = new Kernel();
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
             kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;

@@ -48,6 +48,8 @@ WHITESPACE = <<[ \t\n\r]+>> %ignore%
 
 ComplexExpression = Expression | LetExpression | IfExpression;
 
+TypedPattern = IDENTIFIER COLON IDENTIFIER;
+
 Expression = BooleanExpression;
 
 LetExpression = LET IDENTIFIER EQ ComplexExpression (LetList)* IN ComplexExpression;
