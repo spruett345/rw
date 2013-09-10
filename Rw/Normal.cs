@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Rw.Evaluation;
+using Rw.Parsing;
 
 namespace Rw
 {
@@ -101,6 +102,37 @@ namespace Rw
         public override Expression AsImprecise()
         {
             return Create(this.Select((x) => x.AsImprecise()).ToArray());
+        }
+
+        public override bool Negative()
+        {
+            if (Head == "multiply")
+            {
+                return this.Where((x) => x.Negative()).Count() % 2 == 1;
+            }
+            return base.Negative();
+        }
+        public override Expression AsNonnegative()
+        {
+            if (Head == "multiply")
+            {
+                var abs = this.Select((x) => x.AsNonnegative());
+                if (abs.Count() == 1)
+                {
+                    return abs.First();
+                }
+                abs = abs.Where((x) => !x.Equals(new Integer(1, Kernel)));
+                if (abs.Count() == 0)
+                {
+                    return new Integer(1, Kernel);
+                }
+                if (abs.Count() == 1)
+                {
+                    return abs.First();
+                }
+                return Create(abs.ToArray());
+            }
+            return base.AsNonnegative();
         }
 
         public virtual Normal Create(params Expression[] args)
@@ -209,13 +241,17 @@ namespace Rw
         }
         public override string PrettyForm()
         {
+            if (this.RequiresPrettyPrint())
+            {
+                return this.PrettyPrint();
+            }
             StringBuilder bldr = new StringBuilder();
             bldr.Append(Head);
             bldr.Append('(');
 
             if (Arguments.Length > 0)
             {
-                bldr.Append(Arguments[0].FullForm());
+                bldr.Append(Arguments[0].PrettyForm());
             }
             for (int i = 1; i < Arguments.Length; i++)
             {

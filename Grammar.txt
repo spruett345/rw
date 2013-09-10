@@ -45,7 +45,8 @@ EQ = "="
 GT = ">"
 LT = "<"
 
-NUMBER = <<((\+|-)?\d+)|([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+))>>
+NUMBER = <<-?(\d+)>>
+DECIMAL = <<-?(\d*)\.\d+>>
 IDENTIFIER = <<[a-z_][a-zA-Z_?]*>>
 WHITESPACE = <<[ \t\n\r]+>> %ignore%
 
@@ -73,18 +74,17 @@ BooleanExpressionTail = AND BooleanExpression | OR BooleanExpression;
 CompExpression = ArithExpression [CompExpressionTail];
 CompExpressionTail = GTE CompExpression | LTE CompExpression | EQ CompExpression 
 						| GT CompExpression | LT CompExpression;
-
+						
 ArithExpression = Term [ArithExpressionTail];
-ArithExpressionTail = PLUS Expression | MINUS Expression;
+ArithExpressionTail = PLUS ArithExpression | MINUS ArithExpression;
 
 Term = PowExpression [TermTail];
-     
-TermTail = STAR Expression | SLASH Expression;
+TermTail = STAR Term | SLASH Term;
 
 PowExpression = Factor [PowTail];
-PowTail = CARET Expression;
+PowTail = CARET PowExpression;
 
 Factor = Atom | LPAR Expression RPAR | MINUS Expression | FunctionExpression | IDENTIFIER TypeTail;
 
-Atom = NUMBER | IDENTIFIER;
+Atom = NUMBER | DECIMAL | IDENTIFIER;
 TypeTail = COLON IDENTIFIER [LPAR IDENTIFIER (COMMA IDENTIFIER)* RPAR];

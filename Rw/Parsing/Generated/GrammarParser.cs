@@ -238,11 +238,11 @@ namespace Rw.Parsing.Generated {
                                             "ArithExpressionTail");
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.PLUS, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.ARITH_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.MINUS, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.ARITH_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -257,12 +257,12 @@ namespace Rw.Parsing.Generated {
             pattern = new ProductionPattern((int) GrammarConstants.TERM_TAIL,
                                             "TermTail");
             alt = new ProductionPatternAlternative();
-            alt.AddToken((int) GrammarConstants.STAR, 0, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddToken((int) GrammarConstants.STAR, 1, 1);
+            alt.AddProduction((int) GrammarConstants.TERM, 1, 1);
             pattern.AddAlternative(alt);
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.SLASH, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.TERM, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -278,7 +278,7 @@ namespace Rw.Parsing.Generated {
                                             "PowTail");
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.CARET, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.POW_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -309,6 +309,9 @@ namespace Rw.Parsing.Generated {
                                             "Atom");
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.NUMBER, 1, 1);
+            pattern.AddAlternative(alt);
+            alt = new ProductionPatternAlternative();
+            alt.AddToken((int) GrammarConstants.DECIMAL, 1, 1);
             pattern.AddAlternative(alt);
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);

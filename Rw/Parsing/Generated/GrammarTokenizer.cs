@@ -205,7 +205,13 @@ namespace Rw.Parsing.Generated {
             pattern = new TokenPattern((int) GrammarConstants.NUMBER,
                                        "NUMBER",
                                        TokenPattern.PatternType.REGEXP,
-                                       "((\\+|-)?\\d+)|([+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+))");
+                                       "-?(\\d+)");
+            AddPattern(pattern);
+
+            pattern = new TokenPattern((int) GrammarConstants.DECIMAL,
+                                       "DECIMAL",
+                                       TokenPattern.PatternType.REGEXP,
+                                       "-?(\\d*)\\.\\d+");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.IDENTIFIER,

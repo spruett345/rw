@@ -108,6 +108,9 @@ namespace Rw.Parsing.Generated {
             case (int) GrammarConstants.NUMBER:
                 EnterNumber((Token) node);
                 break;
+            case (int) GrammarConstants.DECIMAL:
+                EnterDecimal((Token) node);
+                break;
             case (int) GrammarConstants.IDENTIFIER:
                 EnterIdentifier((Token) node);
                 break;
@@ -249,6 +252,8 @@ namespace Rw.Parsing.Generated {
                 return ExitLt((Token) node);
             case (int) GrammarConstants.NUMBER:
                 return ExitNumber((Token) node);
+            case (int) GrammarConstants.DECIMAL:
+                return ExitDecimal((Token) node);
             case (int) GrammarConstants.IDENTIFIER:
                 return ExitIdentifier((Token) node);
             case (int) GrammarConstants.PROGRAM:
@@ -1105,6 +1110,32 @@ namespace Rw.Parsing.Generated {
          * discovered errors</exception>
          */
         public virtual Node ExitNumber(Token node) {
+            return node;
+        }
+
+        /**
+         * <summary>Called when entering a parse tree node.</summary>
+         *
+         * <param name='node'>the node being entered</param>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual void EnterDecimal(Token node) {
+        }
+
+        /**
+         * <summary>Called when exiting a parse tree node.</summary>
+         *
+         * <param name='node'>the node being exited</param>
+         *
+         * <returns>the node to add to the parse tree, or
+         *          null if no parse tree should be created</returns>
+         *
+         * <exception cref='ParseException'>if the node analysis
+         * discovered errors</exception>
+         */
+        public virtual Node ExitDecimal(Token node) {
             return node;
         }
 
