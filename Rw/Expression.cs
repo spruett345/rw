@@ -6,6 +6,8 @@ namespace Rw
 {
     /// <summary>
     /// A base class for all Expression types.
+    /// Defines an interface for methods to be implemented to express
+    /// common functionality, and provides several default implementations.
     /// </summary>
     public abstract class Expression
     {
@@ -23,6 +25,11 @@ namespace Rw
             Variables = new HashSet<Symbol>();
         }
 
+        /// <summary>
+        /// Gives whether this expression is decidedly negative or
+        /// less than zero. True if this < 0, false if not or 
+        /// undecidable.
+        /// </summary>
         public virtual bool Negative()
         {
             return false;
