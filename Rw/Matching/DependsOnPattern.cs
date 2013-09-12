@@ -2,6 +2,11 @@ using System;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// A lookahead pattern for an expression which
+    /// depends on another, or has that symbol in its
+    /// set of free variables.
+    /// </summary>
     public class DependsOnPattern : Pattern
     {
         private readonly string DependsOn;

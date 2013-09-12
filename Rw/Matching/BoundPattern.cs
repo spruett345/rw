@@ -2,6 +2,10 @@ using System;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// A pattern which will be bound to a specific
+    /// name or key if it is matched.
+    /// </summary>
     public class BoundPattern : Pattern
     {
         public readonly Pattern BasePattern;

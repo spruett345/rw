@@ -2,6 +2,11 @@ using System;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// A lookahead pattern which only matches if
+    /// the expression is constant with respect to another
+    /// bound symbol.
+    /// </summary>
     public class ConstantPattern : Pattern
     {
         private readonly string RespectTo;

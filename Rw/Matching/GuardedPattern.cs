@@ -2,6 +2,12 @@ using System;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// A pattern with a boolean constraint on it, defined
+    /// in a where clause. The pattern will only match if the
+    /// base is true and the expression evaluates true
+    /// given the match bindings.
+    /// </summary>
     public class GuardedPattern : Pattern
     {
         private readonly Expression Condition;
