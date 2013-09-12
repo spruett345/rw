@@ -55,7 +55,7 @@ WHITESPACE = <<[ \t\n\r]+>> %ignore%
 
 Program = (ComplexExpression | PatternDefinition)+;
 
-PatternDefinition = DEF Expression [WHERE ComplexExpression] DEFEQ Expression;
+PatternDefinition = DEF Expression [WHERE ComplexExpression] DEFEQ ComplexExpression;
 ComplexExpression = Expression | LetExpression | IfExpression;
 
 Expression = BooleanExpression;
@@ -63,7 +63,7 @@ Expression = BooleanExpression;
 LetExpression = LET IDENTIFIER EQ ComplexExpression (LetList)* IN ComplexExpression;
 LetList = COMMA IDENTIFIER EQ ComplexExpression;
 
-IfExpression = IF Expression THEN Expression ELSE Expression;
+IfExpression = IF Expression THEN ComplexExpression ELSE ComplexExpression;
 
 FunctionExpression = IDENTIFIER LPAR [ArgumentList] RPAR;
 ArgumentList = Expression (COMMA Expression)*;

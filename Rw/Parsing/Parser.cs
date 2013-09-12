@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Collections.Generic;
 using Rw.Matching;
 using Rw.Parsing.Generated;
+using Rw.Evaluation;
 using PerCederberg.Grammatica.Runtime;
 
 namespace Rw.Parsing
@@ -35,6 +36,26 @@ namespace Rw.Parsing
                         Node inner = child.GetChildAt(0);
                         Console.WriteLine(ParseExpression(inner).Evaluate().PrettyForm());
                     }
+                    else if (child.Id == (int)GrammarConstants.PATTERN_DEFINITION)
+                    {
+                        Pattern p = ParsePattern(child.GetChildAt(1));
+                        NormalPattern normal = p as NormalPattern;
+                        string head = "";
+                        if (normal != null)
+                        {
+                            head = normal.FunctionHead;
+                        }
+                        int index = 3;
+                        if (child.GetChildAt(2).Id == (int)GrammarConstants.WHERE)
+                        {
+                            Expression guard = ParseExpression(child.GetChildAt(3));
+                            p = new GuardedPattern(guard, p);
+                            index = 5;
+                        }
+                        Expression def = ParseExpression(child.GetChildAt(index));
+                        Rule rule = new Rule(p, def);
+                        Kernel.AddRule(head, rule);
+                    }
                 }
             } 
             catch (Exception e)
@@ -45,16 +66,24 @@ namespace Rw.Parsing
 
         public Expression ParseExpression()
         {
-            return null;
+            return ParseExpression(InternalParser.Parse().GetChildAt(0));
         }
         public Pattern ParsePattern()
         {
-            return null;
+            return ParsePattern(InternalParser.Parse().GetChildAt(0));
         }
 
         private Pattern ParsePattern(Node node)
         {
-            return null;
+            if (node.Id == (int)GrammarConstants.FACTOR)
+            {
+                return ParseFactorPattern(node);
+            }
+            if (node.Id == (int)GrammarConstants.ATOM)
+            {
+                return ParseAtomPattern(node.GetChildAt(0));
+            }
+            return ParseBinaryPattern(node);
         }
         private Pattern ParseAtomPattern(Node node)
         {
@@ -98,6 +127,7 @@ namespace Rw.Parsing
                 string id = ExtractValue(child);
                 Node tail = node.GetChildAt(1);
                 string type = ExtractValue(tail.GetChildAt(1));
+                return new BoundPattern(new TypedPattern(type), id);
             }
             return null;
         }
@@ -118,6 +148,39 @@ namespace Rw.Parsing
             {
                 return new NormalPattern(ExtractValue(id));
             }
+        }
+        private Pattern ParseBinaryPattern(Node node)
+        {
+            if (node.GetChildCount() == 1)
+            {
+                return ParsePattern(node.GetChildAt(0));
+            }
+            else
+            {
+                Node tail = node.GetChildAt(1);
+                string op = ExtractValue(tail.GetChildAt(0)).Trim();
+                Node left = node.GetChildAt(0);
+                Node right = tail.GetChildAt(1);
+                return PatternOperate(op, left, right);
+            }
+        }
+
+        private Pattern PatternOperate(string op, Node left, Node right)
+        {
+            switch (op)
+            {
+                case "+":
+                    return new NormalPattern("add", ParsePattern(left), ParsePattern(right));
+                case "*":
+                    return new NormalPattern("multiply",ParsePattern(left), ParsePattern(right));
+                case "^":
+                    return new NormalPattern("pow", ParsePattern(left), ParsePattern(right));
+                case "and":
+                    return new NormalPattern("and", ParsePattern(left), ParsePattern(right));
+                case "or":
+                    return new NormalPattern("or", ParsePattern(left), ParsePattern(right));
+            }
+            throw new Exception("Did not expect operator " + op  + " in pattern");
         }
 
         private Expression ParseAtom(Node node)
@@ -230,6 +293,28 @@ namespace Rw.Parsing
             if (node.Id == (int)GrammarConstants.ATOM)
             {
                 return ParseAtom(node.GetChildAt(0));
+            }
+            if (node.Id == (int)GrammarConstants.LET_EXPRESSION)
+            {
+                string id = ExtractValue(node.GetChildAt(1));
+                Expression value = ParseExpression(node.GetChildAt(3));
+                if (node.GetChildAt(4).Id != (int)GrammarConstants.IN)
+                {
+                    Node list = node.GetChildAt(4);
+                    return null;
+                }
+                else
+                {
+                    Expression bind = ParseExpression(node.GetChildAt(5));
+                    return new Bind(new Symbol(id, Kernel), value, bind, Kernel);
+                }
+            }
+            if (node.Id == (int)GrammarConstants.IF_EXPRESSION)
+            {
+                Expression cond = ParseExpression(node.GetChildAt(1));
+                Expression t = ParseExpression(node.GetChildAt(3));
+                Expression f = ParseExpression(node.GetChildAt(5));
+                return null;
             }
             return ParseBinary(node);
         }

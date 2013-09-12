@@ -4,10 +4,14 @@ using System.Collections.Generic;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// A pattern to match against normals, taking into account
+    /// various normal properties such as flat and orderless.
+    /// </summary>
     public class NormalPattern : Pattern
     {
+        public readonly string FunctionHead;
         private readonly Pattern[] Arguments;
-        private readonly string FunctionHead;
         private readonly bool Lookahead;
 
         public NormalPattern(string head, params Pattern[] args)
@@ -183,6 +187,7 @@ namespace Rw.Matching
             
             return partial || leftover.Count() == 0;
         }
+
         private IEnumerable<Expression> OrderlessMatching(IEnumerable<Expression> expressions, MatchEnvironment env, int index, int collector)
         {
             if (index == Arguments.Length)
@@ -225,6 +230,7 @@ namespace Rw.Matching
                 i++;
             }
         }
+
         private int FindCollector()
         {
             var collector = -1;

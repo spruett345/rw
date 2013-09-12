@@ -97,7 +97,7 @@ namespace Rw.Parsing.Generated {
             alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
             alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_2, 0, 1);
             alt.AddToken((int) GrammarConstants.DEFEQ, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -150,9 +150,9 @@ namespace Rw.Parsing.Generated {
             alt.AddToken((int) GrammarConstants.IF, 1, 1);
             alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
             alt.AddToken((int) GrammarConstants.THEN, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
             alt.AddToken((int) GrammarConstants.ELSE, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
