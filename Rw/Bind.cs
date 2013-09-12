@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Rw.Evaluation;
 namespace Rw
 {
+    /// <summary>
+    /// Represents a variable binding into expression evaluation,
+    /// such as expression of the form let x = 1 in x * x.
+    /// </summary>
     public class Bind : Normal
     {
         private readonly Symbol Symbol;

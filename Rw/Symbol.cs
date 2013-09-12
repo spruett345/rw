@@ -2,8 +2,14 @@ using System;
 
 namespace Rw
 {
+    /// <summary>
+    /// Represents a variable, or symbol in an expression.
+    /// </summary>
     public class Symbol : Expression
     {
+        /// <summary>
+        /// The name of this symbol, e.g. 'x' or 'y'.
+        /// </summary>
         public readonly string Name;
         private readonly int ComputedHash;
         

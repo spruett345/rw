@@ -2,8 +2,16 @@ using System;
 
 namespace Rw
 {
+    /// <summary>
+    /// Imprecise floating point decimal type expression.
+    /// Internally uses 128-bit decimals for maximum precision.
+    /// </summary>
     public class Decimal : Expression
     {
+        /// <summary>
+        /// The value of this Decimal expression as a system
+        /// 128-bit decimal.
+        /// </summary>
         public readonly decimal Value;
 
         private readonly int ComputedHash;

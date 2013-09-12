@@ -8,6 +8,11 @@ using Rw.Parsing;
 
 namespace Rw
 {
+    /// <summary>
+    /// Represents an expression of many arguments.
+    /// Examples include functions (log(x)), or operators
+    /// add(2, 2), or other types of compound expressions.
+    /// </summary>
     public class Normal : Expression, IEnumerable<Expression>
     {
         private readonly string FunctionHead;
@@ -76,6 +81,10 @@ namespace Rw
                 return TypeClass.Normal;
             }
         }
+
+        /// <summary>
+        /// Gives the number of arguments to this normal.
+        /// </summary>
         public virtual int Length
         {
             get
@@ -83,6 +92,12 @@ namespace Rw
                 return Arguments.Length;
             }
         }
+        /// <summary>
+        /// Gets the i'th argument of this normal expression.
+        /// </summary>
+        /// <param name='indexer'>
+        /// Index of the argument to access.
+        /// </param>
         public virtual Expression this [int indexer]
         {
             get
@@ -135,10 +150,18 @@ namespace Rw
             return base.AsNonnegative();
         }
 
+        /// <summary>
+        /// Creates a new normal of the same type with the specific
+        /// arguments.
+        /// </summary>
+        /// <param name='args'>
+        /// Arguments to the new normal expression.
+        /// </param>
         public virtual Normal Create(params Expression[] args)
         {
             return new Normal(FunctionHead, Kernel, args);
         }
+
         public override Expression Substitute(Environment env)
         {
             var args = Arguments.Select((x) => x.Substitute(env));
@@ -269,7 +292,14 @@ namespace Rw
                 yield return this[i];
             }
         }
-        // C# has really ugly syntax for this
+        /// <summary>
+        /// Exposes the normal as an IEnumerable over its arguments.
+        /// Makes it easier for pattern matching to iterate and allows
+        /// other classes to provide their own functionality for iteration.
+        /// </summary>
+        /// <returns>
+        /// The enumerator.
+        /// </returns>
         public virtual IEnumerator<Expression> GetEnumerator()
         {
             for (int i = 0; i < Length; i++)

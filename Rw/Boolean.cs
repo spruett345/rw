@@ -2,8 +2,15 @@ using System;
 
 namespace Rw
 {
+    /// <summary>
+    /// Boolean typed expression, exposes
+    /// boolean literals to the type system.
+    /// </summary>
     public class Boolean : Expression
     {
+        /// <summary>
+        /// The value of this boolean expression.
+        /// </summary>
         public readonly bool Value;
 
         public Boolean(bool val, Kernel kernel) : base(kernel)

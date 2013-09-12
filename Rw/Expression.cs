@@ -145,13 +145,29 @@ namespace Rw
             return false;
         }
 
+        /// <summary>
+        /// Gives a set of variables contained within the expression.
+        /// These are the set of variables that this expression
+        /// depends on.
+        /// </summary>
+        /// <returns>
+        /// The variables in a set.
+        /// </returns>
         public virtual ISet<Symbol> FreeVariables()
         {
             return Variables;
         }
 
+        /// <summary>
+        /// Gives a full form representation of the expression
+        /// in string form.
+        /// </summary>
         public abstract string FullForm();
 
+        /// <summary>
+        /// Gives a pretty output with operators printed in
+        /// infix notation as opposed to function.
+        /// </summary>
         public virtual string PrettyForm()
         {
             return FullForm();

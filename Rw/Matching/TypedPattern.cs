@@ -2,6 +2,11 @@ using System;
 
 namespace Rw.Matching
 {
+    /// <summary>
+    /// Represents a pattern constrained on the type it matches.
+    /// This is done first by standard head, or specific defined
+    /// types such as 'num'.
+    /// </summary>
     public class TypedPattern : Pattern
     {
         private readonly string Head;

@@ -3,8 +3,15 @@ using System.Numerics;
 
 namespace Rw
 {
+    /// <summary>
+    /// Aribtrary sized integer expression type.
+    /// </summary>
     public class Integer : Expression
     {
+        /// <summary>
+        /// The value of this integer expression as a
+        /// BigInteger.
+        /// </summary>
         public readonly BigInteger Value;
 
         private readonly int ComputedHash;
