@@ -177,10 +177,12 @@ namespace Rw.Matching
                 if (leftover.Count() == 1)
                 {
                     Arguments[collector].Bind(leftover.First(), env);
+                    leftover = new Expression[0];
                 }
                 else
                 {
                     Arguments[collector].Bind(norm.Create(leftover.ToArray()), env);
+                    leftover = new Expression[0];
                 }
                 return true;
             }
@@ -234,6 +236,13 @@ namespace Rw.Matching
         private int FindCollector()
         {
             var collector = -1;
+            var variablesFound = new List<string>();
+
+            foreach (Pattern pat in Arguments)
+            {
+                variablesFound.AddRange(pat.Variables);
+            }
+
             for (int i = 0; i < Arguments.Length; i++)
             {
                 Pattern pat = Arguments[i];
@@ -241,6 +250,11 @@ namespace Rw.Matching
                 if (bound != null)
                 {
                     pat = bound.BasePattern;
+
+                    if (variablesFound.Where((x) => x == bound.Name).Count() > 1)
+                    {
+                        continue;
+                    }
                 }
 
                 UntypedPattern untyped = pat as UntypedPattern;

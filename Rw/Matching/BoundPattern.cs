@@ -15,6 +15,8 @@ namespace Rw.Matching
         {
             Name = name;
             BasePattern = pattern;
+
+            Variables.Add(Name);
         }
 
         public override bool Matches(Expression exp, MatchEnvironment env)

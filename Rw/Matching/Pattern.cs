@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Rw.Matching
 {
@@ -8,6 +9,13 @@ namespace Rw.Matching
     /// </summary>
     public abstract class Pattern
     {
+        public readonly ISet<string> Variables;
+
+        public Pattern()
+        {
+            Variables = new HashSet<string>();
+        }
+
         /// <summary>
         /// Determines whether this pattern is a match
         /// to the specified expression in the specified
