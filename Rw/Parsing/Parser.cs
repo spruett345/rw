@@ -128,6 +128,24 @@ namespace Rw.Parsing
                 string id = ExtractValue(child);
                 Node tail = node.GetChildAt(1);
                 string type = ExtractValue(tail.GetChildAt(1));
+                
+                if (tail.GetChildCount() > 2)
+                {
+                    var typeArgs = new List<string>();
+                    for (int i = 3; i < tail.GetChildCount(); i += 2)
+                    {
+                        string val = ExtractValue(tail.GetChildAt(i));
+                        typeArgs.Add(val);
+                    }
+                    if (type == "const")
+                    {
+                        return new ConstantPattern(typeArgs[0]);
+                    }
+                    if (type == "depends_on")
+                    {
+                        return new DependsOnPattern(typeArgs[0]);
+                    }
+                }
                 return new BoundPattern(new TypedPattern(type), id);
             }
             return null;

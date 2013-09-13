@@ -19,12 +19,16 @@ def d(f^g, x : sym) :=
 	f^g * (d(f, x) * g/f + d(g, x) * log(f));
 	
 
+def x + x := 2 * x;
 def k:num * x + x := (k + 1) * x;
 def k:num * x + k2:num * x := (k + k2) * x;
+
 def x + 0 := x;
 def x * 0 := 0;
 def x * 1 := x;
-
-def x^k:num * x^k2:num := x^(k + k2);
 def x^1 := x;
 def x^0 := 1;
+
+def x^k:num* x^k2:num := x^(k + k2);
+def x^k:num * x := x^(k + 1);
+def x * x := x^2;

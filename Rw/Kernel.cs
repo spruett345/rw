@@ -19,19 +19,22 @@ namespace Rw
         private Lookup BaseRules;
         private Lookup UserRules;
 
-        private Environment Environment;
+        private Environment KernelEnvironment;
+        private Environment UserEnvironment;
 
         public Kernel()
         {
             NormalAttributes = new Dictionary<string, Rw.NormalAttributes>();
-            Environment = new SubstitutionEnvironment();
+            KernelEnvironment = new SubstitutionEnvironment();
+            UserEnvironment = new SubstitutionEnvironment();
+
             BaseRules = new Lookup();
             UserRules = new Lookup();
 
             LoadAttributes();
             LoadHardRules();
         }
-
+        
         /// <summary>
         /// Returns a list of the attributes of normal expressions
         /// with the specified head. These attributes inclde
@@ -77,9 +80,14 @@ namespace Rw
                 }
             }
         }
+        public Expression Evaluate(Expression exp)
+        {
+            return exp.Substitute(KernelEnvironment).Substitute(UserEnvironment).Evaluate(DefaultRules());
+        }
+
         public void AddRule(string head, Rule rule)
         {
-            BaseRules.AddRule(head, rule);
+            UserRules.AddRule(head, rule);
         }
 
         private void LoadAttributes()
@@ -134,6 +142,8 @@ namespace Rw
                          new Decimal(Math.Sin((env["x"] as Decimal).Value), this));
             MakeHardRule("cos(x:decimal)", (env) =>
                          new Decimal(Math.Cos((env["x"] as Decimal).Value), this));
+
+            MakeHardRule("n(x)", (env) => (env["x"].AsImprecise()));
         }
         private DefinedRule MakeHardRule(string pattern, Func<Environment, Expression> code)
         {
@@ -152,6 +162,7 @@ namespace Rw
             }
             throw new Exception("Could not extract normal head from pattern.");
         }
+
 
         /// <summary>
         /// Returns a default list of rules for expressions
