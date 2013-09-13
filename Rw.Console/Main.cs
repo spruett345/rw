@@ -12,9 +12,10 @@ namespace Rw.Console
     {
         public static void Main(string[] args)
         {
-            
-            Kernel kernel = new Kernel();
+            string rules = System.IO.File.ReadAllText("../../../Kernel.rw");
 
+            Kernel kernel = new Kernel();
+            kernel.Parse(rules);
             kernel.NormalAttributes["nm"] = NormalAttributes.Numeric;
             kernel.NormalAttributes["add"] = NormalAttributes.Flat | NormalAttributes.Orderless;
             kernel.NormalAttributes["multiply"] = NormalAttributes.Flat | NormalAttributes.Orderless;

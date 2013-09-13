@@ -80,4 +80,7 @@
     <Folder Include="Evaluation\" />
     <Folder Include="Parsing\Generated\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Kernel.rw" />
+  </ItemGroup>
 </Project>

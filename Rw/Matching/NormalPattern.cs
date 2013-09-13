@@ -20,6 +20,10 @@ namespace Rw.Matching
             Arguments = args;
 
             Lookahead = Arguments.Any((x) => x.RequiresLookahead());
+            foreach (var pattern in Arguments)
+            {
+                Variables.UnionWith(pattern.Variables);
+            }
         }
 
         public override bool Matches(Expression exp, MatchEnvironment env)

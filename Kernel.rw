@@ -1,0 +1,30 @@
+def not(true) := false;
+def not(false) := true;
+
+def if(true, x, y) :=
+	x;
+def if(false, x, y) :=
+	y;
+
+def log(1) :=
+	0;
+
+def d(q : const(x), x : sym) :=
+	0;
+def d(x, x : sym) :=
+	1;
+def d(y * z, x : sym) :=
+	y * d(z, x) + z * d(y, z);
+def d(f^g, x : sym) :=
+	f^g * (d(f, x) * g/f + d(g, x) * log(f));
+	
+
+def k:num * x + x := (k + 1) * x;
+def k:num * x + k2:num * x := (k + k2) * x;
+def x + 0 := x;
+def x * 0 := 0;
+def x * 1 := x;
+
+def x^k:num * x^k2:num := x^(k + k2);
+def x^1 := x;
+def x^0 := 1;
