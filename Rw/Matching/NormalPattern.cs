@@ -25,6 +25,43 @@ namespace Rw.Matching
                 Variables.UnionWith(pattern.Variables);
             }
         }
+        public NormalPattern(string head, bool flatten, params Pattern[] args)
+        {
+            FunctionHead = head;
+            Arguments = flatten ? FlattenArguments(args) : args;
+
+            Lookahead = Arguments.Any((x) => x.RequiresLookahead());
+            foreach (var pattern in Arguments)
+            {
+                Variables.UnionWith(pattern.Variables);
+            }
+        }
+        private Pattern[] FlattenArguments(Pattern[] args)
+        {
+            var arguments = new List<Pattern>();
+
+            foreach (var arg in args)
+            {
+                NormalPattern norm = arg as NormalPattern;
+                if (norm != null)
+                {
+                    if (norm.FunctionHead.Equals(FunctionHead))
+                    {
+                        arguments.AddRange(norm.Arguments);
+                    }
+                    else
+                    {
+                        arguments.Add(norm);
+                    }
+                }
+                else
+                {
+                    arguments.Add(arg);
+                }
+            }
+            return arguments.ToArray();
+        }
+
 
         public override bool Matches(Expression exp, MatchEnvironment env)
         {

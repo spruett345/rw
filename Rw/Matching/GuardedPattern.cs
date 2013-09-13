@@ -10,8 +10,8 @@ namespace Rw.Matching
     /// </summary>
     public class GuardedPattern : Pattern
     {
-        private readonly Expression Condition;
-        private readonly Pattern BasePattern;
+        public readonly Expression Condition;
+        public readonly Pattern BasePattern;
 
         public GuardedPattern(Expression cond, Pattern pattern)
         {

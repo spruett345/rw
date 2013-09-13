@@ -189,9 +189,9 @@ namespace Rw.Parsing
             switch (op)
             {
                 case "+":
-                    return new NormalPattern("add", ParsePattern(left), ParsePattern(right));
+                    return new NormalPattern("add", true, ParsePattern(left), ParsePattern(right));
                 case "*":
-                    return new NormalPattern("multiply",ParsePattern(left), ParsePattern(right));
+                    return new NormalPattern("multiply", true, ParsePattern(left), ParsePattern(right));
                 case "^":
                     return new NormalPattern("pow", ParsePattern(left), ParsePattern(right));
                 case "and":

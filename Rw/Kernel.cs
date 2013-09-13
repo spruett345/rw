@@ -64,10 +64,20 @@ namespace Rw
 
             foreach (Rule rule in program.Rules)
             {
-                NormalPattern norm = rule.Pattern as NormalPattern;
+                Pattern pattern = rule.Pattern;
+                GuardedPattern guarded =  pattern as GuardedPattern;
+                if (guarded != null)
+                {
+                    pattern = guarded.BasePattern;
+                }
+                NormalPattern norm = pattern as NormalPattern;
                 if (norm != null)
                 {
                     UserRules.AddRule(norm.FunctionHead, rule);
+                }
+                else
+                {
+                    throw new Exception("Invalid pattern defined");
                 }
             }
 
@@ -118,6 +128,27 @@ namespace Rw
                          new Integer((env["x"] as Integer).Value * (env["y"] as Integer).Value, this));
             MakeHardRule("x:decimal * y:decimal", (env) =>
                          new Decimal((env["x"] as Decimal).Value * (env["y"] as Decimal).Value, this));
+
+            MakeHardRule("x:int > y:int", (env) =>
+                         new Boolean((env["x"] as Integer).Value > (env["y"] as Integer).Value, this));
+            MakeHardRule("x:decimal > y:decimal", (env) =>
+                         new Boolean((env["x"] as Decimal).Value > (env["y"] as Decimal).Value, this));
+            MakeHardRule("x:int < y:int", (env) =>
+                         new Boolean((env["x"] as Integer).Value < (env["y"] as Integer).Value, this));
+            MakeHardRule("x:decimal < y:decimal", (env) =>
+                         new Boolean((env["x"] as Decimal).Value < (env["y"] as Decimal).Value, this));
+            MakeHardRule("x:int >= y:int", (env) =>
+                         new Boolean((env["x"] as Integer).Value >= (env["y"] as Integer).Value, this));
+            MakeHardRule("x:decimal >= y:decimal", (env) =>
+                         new Boolean((env["x"] as Decimal).Value >= (env["y"] as Decimal).Value, this));
+            MakeHardRule("x:int <= y:int", (env) =>
+                         new Boolean((env["x"] as Integer).Value <= (env["y"] as Integer).Value, this));
+            MakeHardRule("x:decimal <= y:decimal", (env) =>
+                         new Boolean((env["x"] as Decimal).Value <= (env["y"] as Decimal).Value, this));
+            MakeHardRule("x:int = y:int", (env) =>
+                         new Boolean((env["x"] as Integer).Value == (env["y"] as Integer).Value, this));
+            MakeHardRule("x:decimal = y:decimal", (env) =>
+                         new Boolean((env["x"] as Decimal).Value == (env["y"] as Decimal).Value, this));
 
             MakeHardRule("x:int ^ y:int", (env) => {
                 Integer x = env["x"] as Integer;
