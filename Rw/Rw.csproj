@@ -72,6 +72,7 @@
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\PrettyPrinter.cs" />
     <Compile Include="Parsing\Program.cs" />
+    <Compile Include="SymbolicConstant.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -79,8 +80,5 @@
     <Folder Include="Matching\" />
     <Folder Include="Evaluation\" />
     <Folder Include="Parsing\Generated\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Kernel.rw" />
   </ItemGroup>
 </Project>

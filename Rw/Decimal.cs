@@ -12,11 +12,11 @@ namespace Rw
         /// The value of this Decimal expression as a system
         /// 128-bit decimal.
         /// </summary>
-        public readonly decimal Value;
+        public readonly double Value;
 
         private readonly int ComputedHash;
 
-        public Decimal(decimal val, Kernel kernel) : base(kernel)
+        public Decimal(double val, Kernel kernel) : base(kernel)
         {
             Value = val;
             ComputedHash = ComputeHash();

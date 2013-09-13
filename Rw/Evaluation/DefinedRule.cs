@@ -23,7 +23,7 @@ namespace Rw.Evaluation
                 matched = DefinedCode(environment);
                 if (matched == null)
                 {
-                    result = matched;
+                    result = null;
                     return false;
                 }
                 if (rest == null)

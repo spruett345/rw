@@ -42,7 +42,7 @@ namespace Rw.Parsing
                 }
                 if (Regex.IsMatch(token, @"^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$"))
                 {
-                    return new Decimal(decimal.Parse(token), Kernel);
+                    return new Decimal(double.Parse(token), Kernel);
                 }
                 return new Symbol(token, Kernel);
             } 

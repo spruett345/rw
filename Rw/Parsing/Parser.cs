@@ -97,7 +97,7 @@ namespace Rw.Parsing
                 string value = ExtractValue(node);
                 if (value.Contains(".") || value.Contains("e") || value.Contains("E"))
                 {
-                    return new LiteralPattern(new Decimal(decimal.Parse(value), Kernel));
+                    return new LiteralPattern(new Decimal(double.Parse(value), Kernel));
                 }
                 return new LiteralPattern(new Integer(BigInteger.Parse(value), Kernel));
             }
@@ -214,7 +214,7 @@ namespace Rw.Parsing
                 string value = ExtractValue(node);
                 if (value.Contains(".") || value.Contains("e") || value.Contains("E"))
                 {
-                    return new Decimal(decimal.Parse(value), Kernel);
+                    return new Decimal(double.Parse(value), Kernel);
                 }
                 return new Integer(BigInteger.Parse(value), Kernel);
             }

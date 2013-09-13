@@ -1,23 +1,28 @@
 using System;
-using System.Numerics;
 
 namespace Rw
 {
     /// <summary>
-    /// Aribtrary sized integer expression type.
+    /// Constants which should be left in symbolic form unless
+    /// asked for numerically. Eg: pi/e.
     /// </summary>
-    public class Integer : Expression
+    public class SymbolicConstant : Expression
     {
         /// <summary>
-        /// The value of this integer expression as a
-        /// BigInteger.
+        /// The value of the constant in double form.
         /// </summary>
-        public readonly BigInteger Value;
+        public readonly double Value;
+
+        /// <summary>
+        /// The name of the constant, eg: pi.
+        /// </summary>
+        public readonly string Name;
 
         private readonly int ComputedHash;
 
-        public Integer(BigInteger val, Kernel kernel) : base(kernel)
+        public SymbolicConstant(string name, double val, Kernel kernel) : base(kernel)
         {
+            Name = name;
             Value = val;
             ComputedHash = ComputeHash();
         }
@@ -26,7 +31,7 @@ namespace Rw
         {
             get
             {
-                return "int";
+                return "symconst";
             }
         }
         public override TypeClass Type
@@ -43,7 +48,7 @@ namespace Rw
         }
         public override Expression AsNonnegative()
         {
-            return new Integer(Value < 0 ? Value * -1 : Value, Kernel);
+            return this;
         }
 
         public override bool Numeric()
@@ -65,12 +70,12 @@ namespace Rw
 
         public override string FullForm()
         {
-            return Value.ToString();
+            return Name.ToString();
         }
 
         private int ComputeHash()
         {
-            return "int".GetHashCode() ^ Value.GetHashCode();
+            return "symconst".GetHashCode() ^ Value.GetHashCode() ^ Name.GetHashCode();
         }
 
         public override int GetHashCode()
@@ -79,6 +84,12 @@ namespace Rw
         }
         public override bool Equals(object obj)
         {
+            SymbolicConstant cons = obj as SymbolicConstant;
+            if (cons != null)
+            {
+                return cons.GetHashCode() == GetHashCode() &&
+                    cons.Name == Name && cons.Value == Value;
+            }
             Integer i = obj as Integer;
             if (i != null)
             {
