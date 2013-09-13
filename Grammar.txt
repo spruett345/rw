@@ -47,21 +47,21 @@ LT = "<"
 
 NUMBER = <<-?(\d+)>>
 DECIMAL = <<-?(\d*)\.\d+>>
-IDENTIFIER = <<[a-z_][a-zA-Z_?]*>>
+IDENTIFIER = <<[a-z_][a-zA-Z_?0-9]*>>
 WHITESPACE = <<[ \t\n\r]+>> %ignore%
 
 
 %productions%
 
-Program = (ComplexExpression | PatternDefinition)+;
+Program = (Expression SEMICOLON | LetExpression SEMICOLON | IfExpression | PatternDefinition SEMICOLON)+;
 
 PatternDefinition = DEF Expression [WHERE ComplexExpression] DEFEQ ComplexExpression;
 ComplexExpression = Expression | LetExpression | IfExpression;
 
 Expression = BooleanExpression;
 
-LetExpression = LET IDENTIFIER EQ ComplexExpression (LetList)* IN ComplexExpression;
-LetList = COMMA IDENTIFIER EQ ComplexExpression;
+LetExpression = LET IDENTIFIER EQ ComplexExpression [LetList] IN ComplexExpression;
+LetList = (COMMA IDENTIFIER EQ ComplexExpression)+;
 
 IfExpression = IF Expression THEN ComplexExpression ELSE ComplexExpression;
 

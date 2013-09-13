@@ -23,45 +23,37 @@ namespace Rw.Parsing
             Kernel = kernel;
         }
 
-        public void ParseProgram()
+        public Program ParseProgram()
         {
-            try
+            Node root = InternalParser.Parse();
+            List<Rule> rules = new List<Rule>();
+            List<Expression> expressions = new List<Expression>();
+            for (int i = 0; i < root.GetChildCount(); i++)
             {
-                Node root = InternalParser.Parse();
-                for (int i = 0; i < root.GetChildCount(); i++)
+                Node child = root.GetChildAt(i);
+                if (child.Id == (int)GrammarConstants.EXPRESSION 
+                    || child.Id == (int)GrammarConstants.LET_EXPRESSION 
+                    || child.Id == (int)GrammarConstants.IF_EXPRESSION)
                 {
-                    Node child = root.GetChildAt(i);
-                    if (child.Id == (int)GrammarConstants.COMPLEX_EXPRESSION)
-                    {
-                        Node inner = child.GetChildAt(0);
-                        Console.WriteLine(ParseExpression(inner).Evaluate().PrettyForm());
-                    }
-                    else if (child.Id == (int)GrammarConstants.PATTERN_DEFINITION)
-                    {
-                        Pattern p = ParsePattern(child.GetChildAt(1));
-                        NormalPattern normal = p as NormalPattern;
-                        string head = "";
-                        if (normal != null)
-                        {
-                            head = normal.FunctionHead;
-                        }
-                        int index = 3;
-                        if (child.GetChildAt(2).Id == (int)GrammarConstants.WHERE)
-                        {
-                            Expression guard = ParseExpression(child.GetChildAt(3));
-                            p = new GuardedPattern(guard, p);
-                            index = 5;
-                        }
-                        Expression def = ParseExpression(child.GetChildAt(index));
-                        Rule rule = new Rule(p, def);
-                        Kernel.AddRule(head, rule);
-                    }
+                    expressions.Add(ParseExpression(child));
                 }
-            } 
-            catch (Exception e)
-            {
-                Console.WriteLine("Parser error: " + e.Message);
+                else if (child.Id == (int)GrammarConstants.PATTERN_DEFINITION)
+                {
+                    Pattern p = ParsePattern(child.GetChildAt(1));
+                   
+                    int index = 3;
+                    if (child.GetChildAt(2).Id == (int)GrammarConstants.WHERE)
+                    {
+                        Expression guard = ParseExpression(child.GetChildAt(3));
+                        p = new GuardedPattern(guard, p);
+                        index = 5;
+                    }
+                    Expression def = ParseExpression(child.GetChildAt(index));
+                    Rule rule = new Rule(p, def);
+                    rules.Add(rule);
+                }
             }
+            return new Program(rules, expressions);
         }
 
         public Expression ParseExpression()
@@ -89,6 +81,15 @@ namespace Rw.Parsing
         {
             if (node.Id == (int)GrammarConstants.IDENTIFIER)
             {
+                string id = ExtractValue(node);
+                if (id == "true")
+                {
+                    return new LiteralPattern(new Boolean(true, Kernel));
+                }
+                if (id == "false")
+                {
+                    return new LiteralPattern(new Boolean(false, Kernel));
+                }
                 return new BoundPattern(new UntypedPattern(), ExtractValue(node));
             }
             if (node.Id == (int)GrammarConstants.NUMBER || node.Id == (int)GrammarConstants.DECIMAL)
@@ -179,6 +180,16 @@ namespace Rw.Parsing
                     return new NormalPattern("and", ParsePattern(left), ParsePattern(right));
                 case "or":
                     return new NormalPattern("or", ParsePattern(left), ParsePattern(right));
+                case ">":
+                    return new NormalPattern("gt", ParsePattern(left), ParsePattern(right));
+                case "<":
+                    return new NormalPattern("lt", ParsePattern(left), ParsePattern(right));
+                case ">=":
+                    return new NormalPattern("gte", ParsePattern(left), ParsePattern(right));
+                case "<=":
+                    return new NormalPattern("lte", ParsePattern(left), ParsePattern(right));
+                case "=":
+                    return new NormalPattern("equals", ParsePattern(left), ParsePattern(right));
             }
             throw new Exception("Did not expect operator " + op  + " in pattern");
         }
@@ -187,6 +198,15 @@ namespace Rw.Parsing
         {
             if (node.Id == (int)GrammarConstants.IDENTIFIER)
             {
+                string value = ExtractValue(node);
+                if (value == "true")
+                {
+                    return new Boolean(true, Kernel);
+                }
+                else if (value == "false")                    
+                {
+                    return new Boolean(false, Kernel);
+                }
                 return new Symbol(ExtractValue(node), Kernel);
             }
             if (node.Id == (int)GrammarConstants.NUMBER || node.Id == (int)GrammarConstants.DECIMAL)
@@ -277,6 +297,18 @@ namespace Rw.Parsing
                                       new Normal("pow", Kernel, ParseExpression(right), new Integer(-1, Kernel)));
                 case "^":
                     return new Normal("pow", Kernel, ParseExpression(left), ParseExpression(right));
+
+                case ">":
+                    return new Normal("gt", Kernel, ParseExpression(left), ParseExpression(right));
+                case "<":
+                    return new Normal("lt", Kernel, ParseExpression(left), ParseExpression(right));
+                case ">=":
+                    return new Normal("gte", Kernel, ParseExpression(left), ParseExpression(right));
+                case "<=":
+                    return new Normal("lte", Kernel, ParseExpression(left), ParseExpression(right));
+                case "=":
+                    return new Normal("equals", Kernel, ParseExpression(left), ParseExpression(right));
+
                 case "and":
                     return new Normal("and", Kernel, ParseExpression(left), ParseExpression(right));
                 case "or":
@@ -298,10 +330,26 @@ namespace Rw.Parsing
             {
                 string id = ExtractValue(node.GetChildAt(1));
                 Expression value = ParseExpression(node.GetChildAt(3));
-                if (node.GetChildAt(4).Id != (int)GrammarConstants.IN)
+                if (node.GetChildAt(4).Id == (int)GrammarConstants.LET_LIST)
                 {
                     Node list = node.GetChildAt(4);
-                    return null;
+                    var bindings = new Stack<Tuple<string, Expression>>();
+                    bindings.Push(new Tuple<string, Expression>(id, value));
+                    for (int i = 1; i < list.GetChildCount(); i += 4)
+                    {
+                        string name = ExtractValue(list.GetChildAt(i));
+                        Expression val = ParseExpression(list.GetChildAt(i + 2));
+                        bindings.Push(new Tuple<string, Expression>(name, val));
+                    }
+                    Expression bind = ParseExpression(node.GetChildAt(6));
+                    var pop = bindings.Pop();
+                    Bind outer = new Bind(new Symbol(pop.Item1, Kernel), pop.Item2, bind, Kernel);
+                    while (bindings.Count > 0)
+                    {
+                        pop = bindings.Pop();
+                        outer = new Bind(new Symbol(pop.Item1, Kernel), pop.Item2, outer, Kernel);
+                    }
+                    return outer;
                 }
                 else
                 {
@@ -314,7 +362,7 @@ namespace Rw.Parsing
                 Expression cond = ParseExpression(node.GetChildAt(1));
                 Expression t = ParseExpression(node.GetChildAt(3));
                 Expression f = ParseExpression(node.GetChildAt(5));
-                return null;
+                return new Normal("if", Kernel, cond, t, f);
             }
             return ParseBinary(node);
         }

@@ -24,7 +24,8 @@ namespace Rw.Parsing.Generated {
             SUBPRODUCTION_2 = 3002,
             SUBPRODUCTION_3 = 3003,
             SUBPRODUCTION_4 = 3004,
-            SUBPRODUCTION_5 = 3005
+            SUBPRODUCTION_5 = 3005,
+            SUBPRODUCTION_6 = 3006
         }
 
         /**
@@ -128,7 +129,7 @@ namespace Rw.Parsing.Generated {
             alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
             alt.AddToken((int) GrammarConstants.EQ, 1, 1);
             alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
-            alt.AddProduction((int) GrammarConstants.LET_LIST, 0, -1);
+            alt.AddProduction((int) GrammarConstants.LET_LIST, 0, 1);
             alt.AddToken((int) GrammarConstants.IN, 1, 1);
             alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
@@ -137,10 +138,7 @@ namespace Rw.Parsing.Generated {
             pattern = new ProductionPattern((int) GrammarConstants.LET_LIST,
                                             "LetList");
             alt = new ProductionPatternAlternative();
-            alt.AddToken((int) GrammarConstants.COMMA, 1, 1);
-            alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
-            alt.AddToken((int) GrammarConstants.EQ, 1, 1);
-            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
+            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_3, 1, -1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -170,7 +168,7 @@ namespace Rw.Parsing.Generated {
                                             "ArgumentList");
             alt = new ProductionPatternAlternative();
             alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
-            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_3, 0, -1);
+            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_4, 0, -1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -323,7 +321,7 @@ namespace Rw.Parsing.Generated {
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.COLON, 1, 1);
             alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
-            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_5, 0, 1);
+            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_6, 0, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -331,10 +329,19 @@ namespace Rw.Parsing.Generated {
                                             "Subproduction1");
             pattern.Synthetic = true;
             alt = new ProductionPatternAlternative();
-            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
+            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddToken((int) GrammarConstants.SEMICOLON, 1, 1);
+            pattern.AddAlternative(alt);
+            alt = new ProductionPatternAlternative();
+            alt.AddProduction((int) GrammarConstants.LET_EXPRESSION, 1, 1);
+            alt.AddToken((int) GrammarConstants.SEMICOLON, 1, 1);
+            pattern.AddAlternative(alt);
+            alt = new ProductionPatternAlternative();
+            alt.AddProduction((int) GrammarConstants.IF_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             alt = new ProductionPatternAlternative();
             alt.AddProduction((int) GrammarConstants.PATTERN_DEFINITION, 1, 1);
+            alt.AddToken((int) GrammarConstants.SEMICOLON, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -352,7 +359,9 @@ namespace Rw.Parsing.Generated {
             pattern.Synthetic = true;
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.COMMA, 1, 1);
-            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
+            alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
+            alt.AddToken((int) GrammarConstants.EQ, 1, 1);
+            alt.AddProduction((int) GrammarConstants.COMPLEX_EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -361,7 +370,7 @@ namespace Rw.Parsing.Generated {
             pattern.Synthetic = true;
             alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.COMMA, 1, 1);
-            alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
+            alt.AddProduction((int) GrammarConstants.EXPRESSION, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);
 
@@ -369,9 +378,18 @@ namespace Rw.Parsing.Generated {
                                             "Subproduction5");
             pattern.Synthetic = true;
             alt = new ProductionPatternAlternative();
+            alt.AddToken((int) GrammarConstants.COMMA, 1, 1);
+            alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
+            pattern.AddAlternative(alt);
+            AddPattern(pattern);
+
+            pattern = new ProductionPattern((int) SynteticPatterns.SUBPRODUCTION_6,
+                                            "Subproduction6");
+            pattern.Synthetic = true;
+            alt = new ProductionPatternAlternative();
             alt.AddToken((int) GrammarConstants.LPAR, 1, 1);
             alt.AddToken((int) GrammarConstants.IDENTIFIER, 1, 1);
-            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_4, 0, -1);
+            alt.AddProduction((int) SynteticPatterns.SUBPRODUCTION_5, 0, -1);
             alt.AddToken((int) GrammarConstants.RPAR, 1, 1);
             pattern.AddAlternative(alt);
             AddPattern(pattern);

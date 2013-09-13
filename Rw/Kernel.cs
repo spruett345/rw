@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Rw.Matching;
 using Rw.Evaluation;
-
+using Rw.Parsing;
 namespace Rw
 {
     /// <summary>
@@ -45,7 +45,30 @@ namespace Rw
             }
             return Rw.NormalAttributes.None;
         }
-        
+
+        public void Parse(string input, Func<Expression, Expression, bool> callback = null)
+        {
+            Parser parser = new Parser(input, this);
+            Program program = parser.ParseProgram();
+
+            foreach (Rule rule in program.Rules)
+            {
+                NormalPattern norm = rule.Pattern as NormalPattern;
+                if (norm != null)
+                {
+                    UserRules.AddRule(norm.FunctionHead, rule);
+                }
+            }
+
+            foreach (Expression exp in program.Expressions)
+            {
+                Expression eval = exp.Evaluate();
+                if (callback != null)
+                {
+                    callback(exp, eval);
+                }
+            }
+        }
         public void AddRule(string head, Rule rule)
         {
             BaseRules.AddRule(head, rule);

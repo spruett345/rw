@@ -3,17 +3,13 @@
 	- Define some sort of ordering for sorting orderless functions
 	- Add negative/nonnegative for multiplied numbers
 	- String type
-	- As imprecise values
 --- Kernel
 	- Set some protection on base functions
 	- Work with parser to evaluate programs/scripts
 --- Parsing
-	- Define some grammar for the language
+	- Work on interaction with kernel
 	
 --- Pattern matching
-	- Some kind of guarded pattern matching
-		- Finish this once expression eval done
-	- Lookahead based patterns
 	- Default valued pattern matching
 
 --- Compiliation/optimzations

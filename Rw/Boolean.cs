@@ -35,7 +35,7 @@ namespace Rw
 
         public override string FullForm()
         {
-            return Value.ToString();
+            return Value.ToString().ToLower();
         }
 
         public override int GetHashCode()

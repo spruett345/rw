@@ -71,6 +71,7 @@
     <Compile Include="Parsing\Generated\GrammarAnalyzer.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\PrettyPrinter.cs" />
+    <Compile Include="Parsing\Program.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -49,6 +49,11 @@ namespace Rw
             evaluated = Value.Substitute(environment);
             return true;
         }
+
+        public override string PrettyForm()
+        {
+            return "let " + Symbol.PrettyForm() + " = " + Bound.PrettyForm() + " in " + Value.PrettyForm();
+        }
     }
 }
 

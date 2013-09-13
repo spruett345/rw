@@ -31,6 +31,10 @@ namespace Rw
 
             Arguments = Attributes.HasFlag(NormalAttributes.Flat) ?
                 FlattenArguments(args) : args;
+            if (Attributes.HasFlag(NormalAttributes.Orderless))
+            {
+                Array.Sort(Arguments, (x, y) => x.GetHashCode() - y.GetHashCode());
+            }
             IsNumeric = Attributes.HasFlag(NormalAttributes.Numeric) && 
                 this.All((x) => x.Numeric());
 
@@ -214,6 +218,11 @@ namespace Rw
 
             foreach (Expression exp in this)
             {
+                if (exp == null)
+                {
+                    continue;
+                }
+
                 if (!orderless)
                 {
                     hash <<= 1;
@@ -222,7 +231,7 @@ namespace Rw
                 }
                 hash ^= exp.GetHashCode();
             }
-            return 0;
+            return hash;
         }
 
         public override int GetHashCode()

@@ -217,7 +217,7 @@ namespace Rw.Parsing.Generated {
             pattern = new TokenPattern((int) GrammarConstants.IDENTIFIER,
                                        "IDENTIFIER",
                                        TokenPattern.PatternType.REGEXP,
-                                       "[a-z_][a-zA-Z_?]*");
+                                       "[a-z_][a-zA-Z_?0-9]*");
             AddPattern(pattern);
 
             pattern = new TokenPattern((int) GrammarConstants.WHITESPACE,

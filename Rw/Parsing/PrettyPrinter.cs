@@ -1,30 +1,57 @@
 using System;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
 namespace Rw.Parsing
 {
     public static class PrettyPrinter
     {
+        private static Dictionary<string, Func<Normal, string>> Printers;
+        static PrettyPrinter()
+        {
+            Printers = new Dictionary<string, Func<Normal, string>>();
+            Printers["add"] = PrintSum;
+            Printers["multiply"] = PrintProduct;
+            Printers["pow"] = PrintPow;
+            Printers["and"] = (x) => PrintOperator(x, "and");
+            Printers["or"] = (x) => PrintOperator(x, "or");
+            Printers["gte"] = (x) => PrintOperator(x, ">=");
+            Printers["lte"] = (x) => PrintOperator(x, "<=");
+            Printers["equals"] = (x) => PrintOperator(x, "=");
+            Printers["lt"] = (x) => PrintOperator(x, "<");
+            Printers["gt"] = (x) => PrintOperator(x, ">");
+
+        }
         public static bool RequiresPrettyPrint(this Normal norm)
         {
-            return norm.Head == "add" || norm.Head == "multiply" || norm.Head == "pow";
+            return Printers.ContainsKey(norm.Head);
         }
 
         public static string PrettyPrint(this Normal norm)
         {
-            if (norm.Head == "add")
+            try
             {
-                return PrintSum(norm);
-            }
-            if (norm.Head == "multiply")
+                var printer = Printers[norm.Head];
+                return printer(norm);
+            } 
+            catch (KeyNotFoundException ex)
             {
-                return PrintProduct(norm);
+                return norm.FullForm();
             }
-            if (norm.Head == "pow")
+        }
+
+        private static string PrintOperator(Normal norm, string op)
+        {
+            StringBuilder bldr = new StringBuilder();
+            bldr.Append(norm.First().PrettyForm());
+
+            var args = norm.Skip(1);
+            foreach (var arg in args)
             {
-                return PrintPow(norm);
+                bldr.Append(" " + op + " ");
+                bldr.Append(arg.PrettyForm());
             }
-            return norm.FullForm();
+            return bldr.ToString();
         }
 
         private static string PrintSum(Normal norm)

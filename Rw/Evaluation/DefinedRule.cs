@@ -21,6 +21,11 @@ namespace Rw.Evaluation
             if (Pattern.MatchesPartial(match, environment, out matched, out rest))
             {
                 matched = DefinedCode(environment);
+                if (matched == null)
+                {
+                    result = matched;
+                    return false;
+                }
                 if (rest == null)
                 {
                     result = matched;
