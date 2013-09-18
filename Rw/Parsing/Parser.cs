@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
 using Rw.Matching;
@@ -304,15 +305,39 @@ namespace Rw.Parsing
                 case "+":
                     return new Normal("add", Kernel, ParseExpression(left), ParseExpression(right));
                 case "-":
+                    var l = ParseExpression(left);
+                    var r = ParseExpression(right);
+                    var norm = r as Normal;
+                    if (norm != null && norm.Head == "add")
+                    {
+                        var first = norm.First();
+                        first = new Normal("multiply", Kernel, new Integer(-1, Kernel), first);
+
+                        var rest = norm.Skip(1);
+                        var arguments = new Expression[] {l, first}.Union(rest);
+                        return new Normal("add", Kernel, arguments.ToArray());
+                    }
                     return new Normal("add", Kernel,
-                                      ParseExpression(left),
-                                      new Normal("multiply", Kernel, new Integer(-1, Kernel), ParseExpression(right)));
+                                      l,
+                                      new Normal("multiply", Kernel, new Integer(-1, Kernel), r));
                 case "*":
                     return new Normal("multiply", Kernel, ParseExpression(left), ParseExpression(right));
                 case "/":
+                    l = ParseExpression(left);
+                    r = ParseExpression(right);
+                    norm = r as Normal;
+                    if (norm != null && norm.Head == "multiply")
+                    {
+                        var first = norm.First();
+                        first = new Normal("pow", Kernel, first, new Integer(-1, Kernel));
+
+                        var rest = norm.Skip(1);
+                        var arguments = new Expression[] {l, first}.Union(rest);
+                        return new Normal("multiply", Kernel, arguments.ToArray());
+                    }
                     return new Normal("multiply", Kernel,
-                                      ParseExpression(left),
-                                      new Normal("pow", Kernel, ParseExpression(right), new Integer(-1, Kernel)));
+                                      l,
+                                      new Normal("pow", Kernel, r, new Integer(-1, Kernel)));
                 case "^":
                     return new Normal("pow", Kernel, ParseExpression(left), ParseExpression(right));
 

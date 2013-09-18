@@ -20,6 +20,14 @@ namespace Rw
             Value = value;
         }
 
+        public override Normal Create(params Expression[] args)
+        {
+            if (args.Length != 3)
+            {
+                return base.Create(args);
+            }
+            return new Bind(args[0] as Symbol, args[1], args[2], Kernel);
+        }
         public override IEnumerator<Expression> GetEnumerator()
         {
             yield return Symbol;
@@ -40,7 +48,7 @@ namespace Rw
                 return new Bind(Symbol, Bound.Substitute(environment), Value.Substitute(environment), Kernel);
             }
         }
-        public override bool TryEvaluate(Rw.Evaluation.Lookup rules, out Expression evaluated)
+        public override bool TryEvaluate(Lookup rules, out Expression evaluated)
         {
             Expression bind = Bound.Evaluate(rules);
             var environment = new SubstitutionEnvironment();

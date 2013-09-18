@@ -115,14 +115,16 @@ namespace Rw
                 rules = Kernel.DefaultRules();
             }
             Expression evaluated = this;
-            if (evaluated.Imprecise())
+            bool imprecise = evaluated.Imprecise();
+
+            if (imprecise)
             {
                 evaluated = evaluated.AsImprecise();
             }
             Expression prev = evaluated;
             while (prev.TryEvaluate(rules, out evaluated))
             {
-                prev = evaluated;
+                prev = imprecise ? evaluated.AsImprecise() : evaluated;
             }
             return prev;
         }

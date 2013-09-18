@@ -19,8 +19,8 @@ namespace Rw
         private Lookup BaseRules;
         private Lookup UserRules;
 
-        private Environment KernelEnvironment;
-        private Environment UserEnvironment;
+        private SubstitutionEnvironment KernelEnvironment;
+        private SubstitutionEnvironment UserEnvironment;
 
         public Kernel()
         {
@@ -33,6 +33,7 @@ namespace Rw
 
             LoadAttributes();
             LoadHardRules();
+            LoadSymbolicConstants();
         }
         
         /// <summary>
@@ -83,7 +84,7 @@ namespace Rw
 
             foreach (Expression exp in program.Expressions)
             {
-                Expression eval = exp.Evaluate();
+                Expression eval = Evaluate(exp);
                 if (callback != null)
                 {
                     callback(exp, eval);
@@ -100,6 +101,11 @@ namespace Rw
             UserRules.AddRule(head, rule);
         }
 
+        private void LoadSymbolicConstants()
+        {
+            KernelEnvironment.Bind("pi", new SymbolicConstant("pi", Math.PI, this));
+            KernelEnvironment.Bind("e", new SymbolicConstant("e", Math.E, this));
+        }
         private void LoadAttributes()
         {
             NormalAttributes["add"] = Rw.NormalAttributes.Flat | 

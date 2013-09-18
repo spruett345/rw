@@ -51,7 +51,6 @@
     <Compile Include="Matching\TypedPattern.cs" />
     <Compile Include="Matching\NormalPattern.cs" />
     <Compile Include="Kernel.cs" />
-    <Compile Include="Matching\MatchEnvironment.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Parsing\SExpParser.cs" />
     <Compile Include="Boolean.cs" />
@@ -73,6 +72,11 @@
     <Compile Include="Parsing\PrettyPrinter.cs" />
     <Compile Include="Parsing\Program.cs" />
     <Compile Include="SymbolicConstant.cs" />
+    <Compile Include="Parsing\Hand\Tokenizer.cs" />
+    <Compile Include="Parsing\Hand\TokenType.cs" />
+    <Compile Include="Parsing\Hand\Token.cs" />
+    <Compile Include="Parsing\Hand\ParseException.cs" />
+    <Compile Include="Parsing\MatchEnvironment.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -80,5 +84,6 @@
     <Folder Include="Matching\" />
     <Folder Include="Evaluation\" />
     <Folder Include="Parsing\Generated\" />
+    <Folder Include="Parsing\Hand\" />
   </ItemGroup>
 </Project>

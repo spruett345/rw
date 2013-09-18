@@ -33,7 +33,7 @@ namespace Rw
                 FlattenArguments(args) : args;
             if (Attributes.HasFlag(NormalAttributes.Orderless))
             {
-                Array.Sort(Arguments, (x, y) => x.GetHashCode() - y.GetHashCode());
+                Array.Sort(Arguments, (x, y) => - 1 * ((x.Type - y.Type) << 28 | (x.GetHashCode() - y.GetHashCode()) >> 4));
             }
             IsNumeric = Attributes.HasFlag(NormalAttributes.Numeric) && 
                 this.All((x) => x.Numeric());

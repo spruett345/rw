@@ -23,7 +23,7 @@ namespace Rw.Matching
         {
             if (BasePattern.Matches(exp, env))
             {
-                var eval = Condition.Substitute(env).Evaluate();
+                var eval = Condition.Substitute(env).AsImprecise().Evaluate();
                 Boolean b = eval as Boolean;
                 if (b != null)
                 {
@@ -37,7 +37,7 @@ namespace Rw.Matching
         {
             if (BasePattern.MatchesPartial(exp, env, out matched, out rest))
             {
-                var eval = Condition.Substitute(env).Evaluate();
+                var eval = Condition.Substitute(env).AsImprecise().Evaluate();
                 Boolean b = eval as Boolean;
                 if (b != null)
                 {

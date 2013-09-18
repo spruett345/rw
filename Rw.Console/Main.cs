@@ -5,6 +5,7 @@ using Rw;
 using Rw.Parsing;
 using Rw.Matching;
 using Rw.Evaluation;
+using Rw.Parsing.Hand;
 
 namespace Rw.Console
 {
@@ -21,7 +22,12 @@ namespace Rw.Console
             while (true)
             {
                 Console.Write(" > ");
-                try
+                Tokenizer tokens = new Tokenizer(Console.ReadLine());
+                foreach (var token in tokens.Tokens())
+                {
+                    Console.WriteLine(token.Value + " [" + token.Type + "]");
+                }
+                /*try
                 {
                     kernel.Parse(Console.ReadLine(), (exp, eval) => { 
                         Console.Write(exp + " -> ");
@@ -33,7 +39,7 @@ namespace Rw.Console
                 catch (Exception e)
                 {
                     Console.WriteLine(" >>> " + e.Message);
-                }
+                }*/
             }
         }
     }

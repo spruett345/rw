@@ -202,6 +202,13 @@ namespace Rw.Parsing.Generated {
                                        "<");
             AddPattern(pattern);
 
+            pattern = new TokenPattern((int) GrammarConstants.COMMENT,
+                                       "COMMENT",
+                                       TokenPattern.PatternType.REGEXP,
+                                       "//[^\\n]");
+            pattern.Ignore = true;
+            AddPattern(pattern);
+
             pattern = new TokenPattern((int) GrammarConstants.NUMBER,
                                        "NUMBER",
                                        TokenPattern.PatternType.REGEXP,
