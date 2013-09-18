@@ -76,7 +76,7 @@
     <Compile Include="Parsing\Hand\TokenType.cs" />
     <Compile Include="Parsing\Hand\Token.cs" />
     <Compile Include="Parsing\Hand\ParseException.cs" />
-    <Compile Include="Parsing\MatchEnvironment.cs" />
+    <Compile Include="Matching\MatchEnvironment.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
