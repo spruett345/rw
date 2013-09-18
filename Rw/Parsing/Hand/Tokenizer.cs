@@ -88,9 +88,9 @@ namespace Rw.Parsing.Hand
                 token = new Token(sym, TokenType.Symbol);
                 return true;
             }
-            
-            token = new Token(bldr.ToString(), TokenType.None);
-            return false;
+
+            throw new ParseException("did not expect character '" + current + 
+                "', does not match with any valid token", GetLineNumber());
         }
 
         private string ParseIdentifier(StringBuilder start)
@@ -109,16 +109,16 @@ namespace Rw.Parsing.Hand
         }
         private bool ValidNumberChar(char c)
         {
-            return c == '.' || c == 'e' || c == 'E' || char.IsDigit(c);
+            return c == '.' ||  char.IsDigit(c);
         }
         private bool ParseNumber(StringBuilder start)
         {
             bool point = start[0] == '.';
-            bool e = false;
 
             while (Index < Input.Length && ValidNumberChar(Input[Index]))
             {
                 char c = Input[Index];
+
                 if (c == '.' && point)
                 {
                     break;
@@ -128,21 +128,12 @@ namespace Rw.Parsing.Hand
                     point = true;
                 }
 
-                if (c == 'e' || c == 'E' && e)
-                {
-                    break;
-                }
-                else if (c == 'e' || c == 'E')
-                {
-                    e = true;
-                }
-
                 start.Append(c);
 
                 Index++;
             }
-            decimal d;
-            return decimal.TryParse(start.ToString(), out d);
+            string val = start.ToString();
+            return val != "-" && val != ".";
         }
 
         private bool ValidTokenStart(char c)

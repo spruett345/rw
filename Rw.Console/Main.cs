@@ -22,10 +22,10 @@ namespace Rw.Console
             while (true)
             {
                 Console.Write(" > ");
-                Tokenizer tokens = new Tokenizer(Console.ReadLine());
+                Tokenizer tokens = new Tokenizer(Console.ReadLine() + "\n" + Console.ReadLine());
                 foreach (var token in tokens.Tokens())
                 {
-                    Console.WriteLine(token.Value + " [" + token.Type + "]");
+                    Console.WriteLine(token.Value + " [" + token.Type + "] on line " + tokens.GetLineNumber());
                 }
                 /*try
                 {
