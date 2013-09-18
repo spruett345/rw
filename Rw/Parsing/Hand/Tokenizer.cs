@@ -18,7 +18,7 @@ namespace Rw.Parsing.Hand
         };
 
         private static string[] Keywords = new string[] {
-            "let", "def", "when"
+            "let", "def", "when", "in"
         };
 
         private int Index;
