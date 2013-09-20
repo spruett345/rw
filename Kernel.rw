@@ -19,7 +19,7 @@ def d(_ : const(x), x : sym) :=
 def d(x, x : sym) :=
 	1;
 def d(y * z, x : sym) :=
-	y * d(z, x) + z * d(y, z);
+	y * d(z, x) + z * d(y, x);
 def d(f^g, x : sym) :=
 	f^g * (d(f, x) * g/f + d(g, x) * log(f));
 

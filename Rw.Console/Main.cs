@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Rw;
-using Rw.Parsing;
 using Rw.Matching;
 using Rw.Evaluation;
 using Rw.Parsing.Hand;
@@ -22,10 +21,16 @@ namespace Rw.Console
             while (true)
             {
                 Console.Write(" > ");
-                Tokenizer tokens = new Tokenizer(Console.ReadLine() + "\n" + Console.ReadLine());
-                foreach (var token in tokens.Tokens())
+                string input = Console.ReadLine();
+
+                try
                 {
-                    Console.WriteLine(token.Value + " [" + token.Type + "] on line " + tokens.GetLineNumber());
+                    Parser parser = new Parser(input, kernel);
+                    Console.WriteLine(" = " + kernel.Evaluate(parser.ParseExpression()));
+                }
+                catch(ParseException ex)
+                {
+                    Console.WriteLine(" >>> " + ex.Message);
                 }
                 /*try
                 {
