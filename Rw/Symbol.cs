@@ -46,6 +46,11 @@ namespace Rw
             return this;
         }
 
+        public override Expression Invoke(params Expression[] arguments)
+        {
+            return new Normal(Name, Kernel, arguments);
+        }
+
         public override string FullForm()
         {
             return Name;

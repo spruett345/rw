@@ -33,11 +33,16 @@ namespace Rw
             }
         }
 
+        public override Expression Invoke(params Expression[] arguments)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override string FullForm()
         {
             return Value.ToString().ToLower();
         }
-
+        
         public override int GetHashCode()
         {
             return "bool".GetHashCode() ^ Value.GetHashCode();

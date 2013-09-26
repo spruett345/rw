@@ -78,6 +78,10 @@
     <Compile Include="Parsing\Hand\ParseException.cs" />
     <Compile Include="Matching\MatchEnvironment.cs" />
     <Compile Include="Parsing\Hand\Parser.cs" />
+    <Compile Include="Parsing\Hand\ShuntingYardParser.cs" />
+    <Compile Include="Parsing\Hand\Operator.cs" />
+    <Compile Include="Parsing\Hand\ExpressionParser.cs" />
+    <Compile Include="Lambda.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

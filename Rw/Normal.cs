@@ -166,11 +166,22 @@ namespace Rw
             return new Normal(FunctionHead, Kernel, args);
         }
 
+
+        public override Expression Invoke(params Expression[] arguments)
+        {
+            return Create(Arguments.Union(arguments).ToArray());
+        }
+
         public override Expression Substitute(Environment env)
         {
-            var args = Arguments.Select((x) => x.Substitute(env));
+            var args = this.Select((x) => x.Substitute(env));
 
-            return new Normal(FunctionHead, Kernel, args.ToArray());
+            if (env.ContainsKey(FunctionHead))
+            {
+                var head = env[FunctionHead];
+                return head.Invoke(args.ToArray());
+            }
+            return Create(args.ToArray());
         }
 
         public override bool TryEvaluate(Lookup rules, out Expression evaluated)

@@ -68,6 +68,11 @@ namespace Rw
             }
         }
 
+        public override Expression Invoke(params Expression[] arguments)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override string FullForm()
         {
             return Name.ToString();

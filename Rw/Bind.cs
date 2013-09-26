@@ -58,6 +58,12 @@ namespace Rw
             return true;
         }
 
+        public override ISet<Symbol> FreeVariables()
+        {
+            Variables.Remove(Symbol);
+            return Variables;
+        }
+
         public override string PrettyForm()
         {
             return "let " + Symbol.PrettyForm() + " = " + Bound.PrettyForm() + " in " + Value.PrettyForm();

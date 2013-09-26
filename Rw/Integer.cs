@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 
 namespace Rw
@@ -49,6 +50,11 @@ namespace Rw
         public override bool Numeric()
         {
             return true;
+        }
+
+        public override Expression Invoke(params Expression[] arguments)
+        {
+            return new Normal("multiply", Kernel, arguments.Union(new Expression[] { this }).ToArray());
         }
 
         public override Expression AsImprecise()

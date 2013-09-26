@@ -13,8 +13,8 @@ namespace Rw.Parsing.Hand
     public class Tokenizer
     {
         private static string[] Symbols = new string[] {
-            "+", "-", "/", "*", "^", ">", "<", ">=", "<=",
-            "=", "!=", "and", "or", ":=", ";", "(", ")", ",",
+            "+", "-", "/", "*", "^", ">", "<", ">=", "<=", "\\",
+            "=", "!=", "and", "or", ":=", ";", "(", ")", ",", "->"  
         };
 
         private static string[] Keywords = new string[] {
@@ -174,8 +174,8 @@ namespace Rw.Parsing.Hand
             {
                 return cur;
             }
-            Index++;
             string next = cur + Input[Index];
+            Index++;
 
             if (!SymbolStart(next))
             {

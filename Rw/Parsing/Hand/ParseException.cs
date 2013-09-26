@@ -8,6 +8,10 @@ namespace Rw
             : base("Error in parsing on line " + line + ": " + message)
         {
         }
+         public ParseException(string message) 
+            : base(message)
+        {
+        }
     }
 }
 
