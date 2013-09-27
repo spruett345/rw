@@ -33,7 +33,7 @@ namespace Rw
             }
         }
 
-        public override Expression Invoke(params Expression[] arguments)
+        public override Expression Apply(params Expression[] arguments)
         {
             throw new System.NotImplementedException();
         }

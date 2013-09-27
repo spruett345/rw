@@ -69,7 +69,14 @@ namespace Rw.Parsing.Hand
                 }
                 catch (ParseException ex)
                 {
-                    throw new ParseException(ex.Message, Tokenizer.GetLineNumber());
+                    if (ex.LineNumber)
+                    {
+                        throw ex;
+                    }
+                    else
+                    {
+                        throw new ParseException(ex.Message, Tokenizer.GetLineNumber());
+                    }
                 }
             }
             return null;

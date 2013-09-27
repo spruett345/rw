@@ -46,7 +46,7 @@ namespace Rw
             return this;
         }
 
-        public override Expression Invoke(params Expression[] arguments)
+        public override Expression Apply(params Expression[] arguments)
         {
             return new Normal(Name, Kernel, arguments);
         }

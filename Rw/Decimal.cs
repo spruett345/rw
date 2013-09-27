@@ -61,7 +61,7 @@ namespace Rw
             return true;
         }
 
-        public override Expression Invoke(params Expression[] arguments)
+        public override Expression Apply(params Expression[] arguments)
         {
             return new Normal("multiply", Kernel, arguments.Union(new Expression[] { this }).ToArray());
         }

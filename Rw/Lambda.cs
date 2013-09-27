@@ -30,7 +30,7 @@ namespace Rw
             }
             return new Lambda(sym, args[1], Kernel);
         }
-        public override Expression Invoke(params Expression[] arguments)
+        public override Expression Apply(params Expression[] arguments)
         {
             if (arguments.Length == 0)
             {
@@ -46,7 +46,7 @@ namespace Rw
             {
                 var env = new SubstitutionEnvironment();
                 env.Bind(Parameter.Name, arguments[0]);
-                return Body.Substitute(env).Invoke(arguments.Skip(1).ToArray());
+                return Body.Substitute(env).Apply(arguments.Skip(1).ToArray());
             }
         }
 

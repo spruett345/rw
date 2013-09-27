@@ -175,12 +175,12 @@ namespace Rw.Parsing.Hand
                 return cur;
             }
             string next = cur + Input[Index];
-            Index++;
 
             if (!SymbolStart(next))
             {
                 return cur;
             }
+            Index++;
             return ParseSymbol(next);
         }
 

@@ -160,7 +160,7 @@ namespace Rw
             return Variables;
         }
 
-        public abstract Expression Invoke(params Expression[] arguments);
+        public abstract Expression Apply(params Expression[] arguments);
 
         /// <summary>
         /// Gives a full form representation of the expression

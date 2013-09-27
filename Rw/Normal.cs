@@ -167,9 +167,13 @@ namespace Rw
         }
 
 
-        public override Expression Invoke(params Expression[] arguments)
+        public override Expression Apply(params Expression[] arguments)
         {
-            return Create(Arguments.Union(arguments).ToArray());
+            var args = new List<Expression>();
+            args.AddRange(Arguments);
+            args.AddRange(arguments);
+
+            return Create(args.ToArray());
         }
 
         public override Expression Substitute(Environment env)
@@ -179,7 +183,7 @@ namespace Rw
             if (env.ContainsKey(FunctionHead))
             {
                 var head = env[FunctionHead];
-                return head.Invoke(args.ToArray());
+                return head.Apply(args.ToArray());
             }
             return Create(args.ToArray());
         }

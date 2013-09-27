@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Rw.Parsing.Hand
 {
-    public abstract class ShuntingYardParser<T>
+    public abstract class ShuntingYardParser<T> where T : class
     {
         protected static Dictionary<string, Operator> Operators;
 
@@ -38,6 +38,7 @@ namespace Rw.Parsing.Hand
 
             AddOperator("^", 4, true);
             AddOperator("unary -", 10, false, true);
+            AddOperator("apply", 100);
         }
         static void AddOperator(string name, int prec, bool right = false, bool unary = false)
         {
@@ -108,8 +109,16 @@ namespace Rw.Parsing.Hand
             }
             else if (token.Type == TokenType.Identifier)
             {
-                var sym = CreateSymbol(token.Value);
-                ExpressionStack.Push(sym);
+                if (Peek().Value == "(")
+                {
+                    OperatorStack.Push(token.Value);
+                    ExpressionStack.Push(default(T));
+                }
+                else
+                {
+                    var sym = CreateSymbol(token.Value);
+                    ExpressionStack.Push(sym);
+                }
             }
             else if (token.Value == ",")
             {
@@ -127,7 +136,10 @@ namespace Rw.Parsing.Hand
                     throw new ParseException("mismatched parantheses, found extra ')'");
                 }
                 OperatorStack.Pop();
-                // pop a function here
+                if (OperatorStack.Count > 0 && !IsOperator(OperatorStack.Peek()))
+                {
+                    ExpressionStack.Push(PopFunction());
+                }
             }
             else if (IsOperator(token.Value))
             {
@@ -157,6 +169,10 @@ namespace Rw.Parsing.Hand
             {
                 return false;
             }
+            if (Peek().Value== ")")
+            {
+                return OperatorStack.Contains("(");
+            }
             if (Peek().Type == TokenType.NewLine)
             {
                 Take();
@@ -183,6 +199,15 @@ namespace Rw.Parsing.Hand
 
         private bool InsertOperator(Token current, out string op)
         {
+            if (current.Value == "(")
+            {
+                if (LastToken.Value == ")")
+                {
+                    ExpressionStack.Push(null);
+                    op = "apply";
+                    return true;
+                }
+            }
             if (NumericToken(LastToken) && NumericToken(current))
             {
                 if (current.Value.StartsWith("-"))
@@ -239,10 +264,25 @@ namespace Rw.Parsing.Hand
                 || token.Type == TokenType.Integer;
         }
 
+
         protected virtual T PopOperator()
         {
             var op = Operators[OperatorStack.Pop()];
-            if (op.Unary)
+
+            if (op.Value == "apply")
+            {
+                var args = new List<T>();
+                while (ExpressionStack.Peek() != null)
+                {
+                    args.Add(ExpressionStack.Pop());
+                }
+                ExpressionStack.Pop();
+                args.Reverse();
+
+                var head = ExpressionStack.Pop();
+                return CreateFunction(head, args);
+            }
+            else if (op.Unary)
             {
                 if (ExpressionStack.Count < 1)
                 {
@@ -262,6 +302,18 @@ namespace Rw.Parsing.Hand
                 var left = ExpressionStack.Pop();
                 return Operate(op.Value, new T[] { left, right });
             }
+        }
+        protected virtual T PopFunction()
+        {
+            var head = OperatorStack.Pop();
+            var args = new List<T>();
+            while (ExpressionStack.Peek() != null)
+            {
+                args.Add(ExpressionStack.Pop());
+            }
+            ExpressionStack.Pop();
+            args.Reverse();
+            return CreateFunction(CreateSymbol(head), args);
         }
 
         protected abstract T CreateSymbol(string id);

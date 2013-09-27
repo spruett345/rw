@@ -76,11 +76,11 @@ namespace Rw.Parsing.Hand
                 var right = args.ElementAt(1);
                 return new Normal(OperatorMappings[op], Kernel, left, right);
             }
-            throw new NotImplementedException();
+            throw new ParseException("unknown operator " + op + " in expression");
         }
         protected override Expression CreateFunction(Expression head, IEnumerable<Expression> args)
         {
-            throw new NotImplementedException();
+            return head.Apply(args.ToArray());
         }
     }
 }
