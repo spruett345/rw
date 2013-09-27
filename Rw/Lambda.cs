@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Rw.Evaluation;
 
 namespace Rw
 {
@@ -48,6 +49,26 @@ namespace Rw
                 env.Bind(Parameter.Name, arguments[0]);
                 return Body.Substitute(env).Apply(arguments.Skip(1).ToArray());
             }
+        }
+
+        public override Expression Substitute(Environment env)
+        {
+            if (!env.ContainsKey(Parameter.Name))
+            {
+                return new Lambda(Parameter, Body.Substitute(env), Kernel);
+            }
+            else
+            {
+                var environment = new SubstitutionEnvironment(env);
+                environment.Unbind(Parameter.Name);
+                return new Lambda(Parameter, Body, Kernel);
+            }
+        }
+
+        public override bool TryEvaluate(Lookup rules, out Expression evaluated)
+        {
+            evaluated = null;
+            return false;
         }
 
         public override IEnumerator<Expression> GetEnumerator()

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Rw
 {
@@ -54,7 +55,10 @@ namespace Rw
 
         public override Expression Apply(params Expression[] arguments)
         {
-            return new Normal("multiply", Kernel, arguments.Union(new Expression[] { this }).ToArray());
+            var args = new List<Expression>();
+            args.Add(this);
+            args.AddRange(arguments);
+            return new Normal("multiply", Kernel, args.ToArray());
         }
 
         public override Expression AsImprecise()

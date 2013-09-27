@@ -2,47 +2,47 @@ def not(true) := false;
 def not(false) := true;
 
 def if(true, x, y) :=
-	x;
+	x
 def if(false, x, y) :=
-	y;
+	y
 
 def log(1) :=
-	0;
+	0
 def sin(0) :=
-	0;
+	0
 def cos(0) :=
-	1;
+	1
 
 
 def d(_ : const(x), x : sym) :=
-	0;
+	0
 def d(x, x : sym) :=
-	1;
+	1
 def d(y * z, x : sym) :=
-	y * d(z, x) + z * d(y, x);
+	y * d(z, x) + z * d(y, x)
 def d(f^g, x : sym) :=
-	f^g * (d(f, x) * g/f + d(g, x) * log(f));
+	f^g * (d(f, x) * g/f + d(g, x) * log(f))
 
 def d(cos(u), x) :=
-	-sin(u) * d(u, x);
+	-sin(u) * d(u, x)
 def d(sin(u), x) :=
-	cos(u) * d(u, x);
+	cos(u) * d(u, x)
 def d(log(u), x) :=
-	d(u, x) / u;
+	d(u, x) / u
 
 def x + x := 2 * x;
-def k:num * x + x := (k + 1) * x;
-def k:num * x + k2:num * x := (k + k2) * x;
+def k:num * x + x := (k + 1) * x
+def k:num * x + k2:num * x := (k + k2) * x
 
-def x + 0 := x;
-def x * 0 := 0;
-def x * 1 := x;
-def x^1 := x;
-def x^0 := 1;
+def x + 0 := x
+def x * 0 := 0
+def x * 1 := x
+def x^1 := x
+def x^0 := 1
 
-def x^k:num* x^k2:num := x^(k + k2);
-def x^k:num * x := x^(k + 1);
-def x * x := x^2;
+def x^k:num* x^k2:num := x^(k + k2)
+def x^k:num * x := x^(k + 1)
+def x * x := x^2
 
 def 0^k where k < 0 := Infinity;
 def 0^k where k > 0 := 0;

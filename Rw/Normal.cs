@@ -33,7 +33,7 @@ namespace Rw
                 FlattenArguments(args) : args;
             if (Attributes.HasFlag(NormalAttributes.Orderless))
             {
-                Array.Sort(Arguments, (x, y) => - 1 * ((x.Type - y.Type) << 28 | (x.GetHashCode() - y.GetHashCode()) >> 4));
+                Array.Sort(Arguments, (x, y) => ((x.Type - y.Type) << 28 | (x.GetHashCode() - y.GetHashCode()) >> 4));
             }
             IsNumeric = Attributes.HasFlag(NormalAttributes.Numeric) && 
                 this.All((x) => x.Numeric());
@@ -169,6 +169,10 @@ namespace Rw
 
         public override Expression Apply(params Expression[] arguments)
         {
+            if (Attributes.HasFlag(NormalAttributes.Operator))
+            {
+                throw new Exception("cannot apply an operator expression like a function. use * for multiply between parantheses");
+            }
             var args = new List<Expression>();
             args.AddRange(Arguments);
             args.AddRange(arguments);

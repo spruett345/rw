@@ -37,7 +37,7 @@ namespace Rw.Parsing.Hand
             {
                 yield return cur;
             }
-            yield return new Token("", TokenType.End);
+            yield return new Token("end of stream", TokenType.End);
         }
 
         private bool TryReadToken(out Token token)
