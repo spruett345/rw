@@ -28,7 +28,7 @@ namespace Rw.Console
                     Parser parser = new Parser(input, kernel);
                     Console.WriteLine(" = " + kernel.Evaluate(parser.ParseExpression()));
                 }
-                catch(ParseException ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(" >>> " + ex.Message);
                 }

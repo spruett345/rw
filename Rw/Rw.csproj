@@ -82,6 +82,7 @@
     <Compile Include="Parsing\Hand\Operator.cs" />
     <Compile Include="Parsing\Hand\ExpressionParser.cs" />
     <Compile Include="Lambda.cs" />
+    <Compile Include="Parsing\Hand\PatternParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

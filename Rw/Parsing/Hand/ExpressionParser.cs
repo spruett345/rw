@@ -25,7 +25,7 @@ namespace Rw.Parsing.Hand
             OperatorMappings["!="] = "neq";
         }
 
-        public ExpressionParser(Parser parser) : base(parser.Peek, parser.Take, parser.Kernel)
+        public ExpressionParser(Parser parser) : base(() => parser.Peek(false), () => parser.Take(false), parser.Kernel)
         {
             Parser = parser;
         }

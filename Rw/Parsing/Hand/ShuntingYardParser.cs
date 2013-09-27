@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Collections.Generic;
 
 namespace Rw.Parsing.Hand
@@ -102,7 +103,7 @@ namespace Rw.Parsing.Hand
             }
             else if (token.Type == TokenType.Integer)
             {
-                var i = int.Parse(token.Value);
+                var i = BigInteger.Parse(token.Value);
                 var integer = new Integer(i, Kernel);
 
                 ExpressionStack.Push(CreateLiteral(integer));

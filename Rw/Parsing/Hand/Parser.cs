@@ -108,9 +108,30 @@ namespace Rw.Parsing.Hand
             Expect("=");
 
             Expression value = ParseExpression();
-            Expect("in");
-            Expression val = ParseExpression();
-            return new Bind(new Symbol(id.Value, Kernel), value, val, Kernel);
+            Token ex = Expect(",", "in");
+
+            var stack = new Stack<Tuple<string, Expression>>();
+            stack.Push(new Tuple<string, Expression>(id.Value, value));
+            while (ex.Value == ",")
+            {
+                id = Expect(TokenType.Identifier);
+                Expect("=");
+                value = ParseExpression();
+
+                stack.Push(new Tuple<string, Expression>(id.Value, value));
+                ex = Expect(",", "in");
+            }
+
+            Expression bound = ParseExpression();
+            var top = stack.Pop();
+
+            var binding = new Bind(new Symbol(top.Item1, Kernel), top.Item2, bound, Kernel);
+            while (stack.Count > 0)
+            {
+                top = stack.Pop();
+                binding = new Bind(new Symbol(top.Item1, Kernel), top.Item2, binding, Kernel);
+            }
+            return binding;
         }
         private Expression ParseLambdaExpression()
         {
@@ -120,10 +141,30 @@ namespace Rw.Parsing.Hand
             }
 
             Token id = Expect(TokenType.Identifier);
-            Expect("->");
-            Expression body = ParseExpression();
 
-            return new Lambda(new Symbol(id.Value, Kernel), body, Kernel);
+            Token exp = Expect(",", "->");
+
+            var stack = new Stack<string>();
+            stack.Push(id.Value);
+
+            while (exp.Value == ",")
+            {
+                id = Expect(TokenType.Identifier);
+                if (stack.Contains(id.Value))
+                {
+                    throw new ParseException("cannot create a lambda function with two variables that are the same");
+                }
+                stack.Push(id.Value);
+                exp = Expect(",", "->");
+            }
+            Expression body = ParseExpression();
+            Expression lambda = new Lambda(new Symbol(stack.Pop(), Kernel), body, Kernel);
+            while (stack.Count > 0)
+            {
+                string v = stack.Pop();
+                lambda = new Lambda(new Symbol(v, Kernel), lambda, Kernel);
+            }
+            return lambda;
         }
 
 
