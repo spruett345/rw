@@ -1,3 +1,0 @@
-def (k:int) * y:int + k:int where k = 1 := k + y
-
-2*x*y*f(x)
