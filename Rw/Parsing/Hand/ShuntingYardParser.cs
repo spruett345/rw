@@ -170,6 +170,10 @@ namespace Rw.Parsing.Hand
             {
                 return false;
             }
+            if (Peek().Value == ":=")
+            {
+                return false;
+            }
             if (Peek().Value== ")")
             {
                 return OperatorStack.Contains("(");

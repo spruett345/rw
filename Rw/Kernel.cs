@@ -4,9 +4,12 @@ using System.Numerics;
 using Rw.Matching;
 using Rw.Evaluation;
 using Rw.Parsing;
+using Rw.Parsing.Hand;
+
 
 namespace Rw
 {
+    using Parser = Rw.Parsing.Hand.Parser;
     /// <summary>
     /// A kernel is an object which gives a context for expressions
     /// to be evaluated in. It contains rules and acts as an environment to

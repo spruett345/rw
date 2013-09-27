@@ -17,7 +17,8 @@ namespace Rw.Console
 
             Kernel kernel = new Kernel();
             kernel.Parse(rules);
-
+            Parser testParser = new Parser("let x = 1, y = 2 in x y z", kernel);
+            Console.WriteLine(kernel.Evaluate(testParser.ParseExpression()));
             while (true)
             {
                 Console.Write(" > ");

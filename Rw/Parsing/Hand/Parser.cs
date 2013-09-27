@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Numerics;
 using Rw.Matching;
+using Rw.Evaluation;
 
 namespace Rw.Parsing.Hand
 {
@@ -113,25 +114,68 @@ namespace Rw.Parsing.Hand
             return null;
         }
 
-        private Token Expect(params TokenType[] type)
+        public Program ParseProgram()
         {
-            if (!type.Any(x => x == Peek().Type))
+            Token token = Take();
+
+            var rules = new List<Rule>();
+            var expressions = new List<Expression>();
+
+            while (token.Type != TokenType.End)
+            {
+                if (token.Value == "def")
+                {
+                    rules.Add(ParseRule());
+                }
+                else
+                {
+                    expressions.Add(ParseExpression(token));
+                }
+                token = Take();
+            }
+            return new Program(rules, expressions);
+        }
+        public Rule ParseRule(Token start = null)
+        {
+            if (start == null)
+            {
+                start = Peek();
+            }
+
+            Pattern pattern = ParsePattern(start);
+            Expect(false, ":=");
+            Expression body = ParseExpression();
+            return new Rule(pattern, body);
+        }
+        private Token Expect(bool ignoreNewline, params TokenType[] type)
+        {
+            if (!type.Any(x => x == Peek(ignoreNewline).Type))
             {
                 throw new ParseException("did not expect token of type " 
                                          + Peek().Type+  " (value " + Peek().Value + ")", 
                                          Tokenizer.GetLineNumber());
             }
-            return Take();
+            return Take(ignoreNewline);
         }
-        private Token Expect(params string[] vals)
+        private Token Expect(bool ignoreNewline, params string[] vals)
         {
-            if (!vals.Any(x => x == Peek().Value))
+            if (!vals.Any(x => x == Peek(ignoreNewline).Value))
             {
                 throw new ParseException("did not expect token " + Peek().Value, 
                                          Tokenizer.GetLineNumber());
             }
-            return Take();
+            return Take(ignoreNewline);
         }
+
+        private Token Expect(params TokenType[] type)
+        {
+            return Expect(true, type);
+        }
+        private Token Expect(params string[] vals)
+        {
+            return Expect(true, vals);
+        }
+
         private Expression ParseLetExpression()
         {
 
@@ -145,7 +189,7 @@ namespace Rw.Parsing.Hand
             stack.Push(new Tuple<string, Expression>(id.Value, value));
             while (ex.Value == ",")
             {
-                id = Expect(TokenType.Identifier);
+                id = Expect(true, TokenType.Identifier);
                 Expect("=");
                 value = ParseExpression();
 
