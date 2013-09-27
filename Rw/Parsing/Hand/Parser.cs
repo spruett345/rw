@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Numerics;
+using Rw.Matching;
 
 namespace Rw.Parsing.Hand
 {
@@ -27,8 +28,6 @@ namespace Rw.Parsing.Hand
             OperatorMappings[">="] = "gte";
             OperatorMappings["="] = "eq";
             OperatorMappings["!="] = "neq";
-
-
         }
         public Parser(string input, Kernel kernel)
         {
@@ -37,7 +36,39 @@ namespace Rw.Parsing.Hand
             Tokens.MoveNext();
             Kernel = kernel;
         }
-        
+
+        public Pattern ParsePattern(Token start = null)
+        {
+            if (start == null)
+            {
+                start = Peek();
+            }
+            var shuntingYard = new PatternParser(this);
+            Pattern pattern;
+            try
+            {
+                pattern = shuntingYard.Parse();
+            }
+            catch (ParseException ex)
+            {
+                if (ex.LineNumber)
+                {
+                    throw ex;
+                }
+                else
+                {
+                    throw new ParseException(ex.Message, Tokenizer.GetLineNumber());
+                }
+            }
+            if (Peek().Value == "when")
+            {
+                Take();
+                Expression condition = ParseExpression();
+
+                pattern = new GuardedPattern(condition, pattern);
+            }
+            return pattern;
+        }
         public Expression ParseExpression(Token start = null)
         {
             if (start == null)
