@@ -34,7 +34,7 @@ namespace Rw.Parsing
                 var printer = Printers[norm.Head];
                 return printer(norm);
             } 
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 return norm.FullForm();
             }

@@ -67,7 +67,7 @@ namespace Rw
             {
                 return new Decimal((double)Value, Kernel);
             } 
-            catch (OverflowException overflow)
+            catch (OverflowException)
             {
                 return new Decimal(double.MaxValue, Kernel);
             }
@@ -102,7 +102,7 @@ namespace Rw
                 {
                     return d.Value == (double)Value;
                 }
-                catch (OverflowException overflow)
+                catch (OverflowException)
                 {
                     return false;
                 }
