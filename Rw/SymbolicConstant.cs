@@ -38,7 +38,7 @@ namespace Rw
         {
             get
             {
-                return TypeClass.Integer;
+                return TypeClass.Number;
             }
         }
 

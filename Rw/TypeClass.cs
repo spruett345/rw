@@ -9,11 +9,11 @@ namespace Rw
 	public enum TypeClass
 	{
 		None = 0,
-		Symbol,
-		Normal,
 		
-		Integer,
-		Decimal
+		Normal,
+        Symbol,
+		
+		Number
 	}
 }
 

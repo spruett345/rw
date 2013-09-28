@@ -79,7 +79,9 @@
     <Compile Include="Parsing\Hand\PatternParser.cs" />
     <Compile Include="Rational.cs" />
     <Compile Include="Matching\RationalPattern.cs" />
-    <Compile Include="Math\IntegerMath.cs" />
+    <Compile Include="Mathematics\IntegerMath.cs" />
+    <Compile Include="NativeExpression.cs" />
+    <Compile Include="Number.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -87,6 +89,6 @@
     <Folder Include="Matching\" />
     <Folder Include="Evaluation\" />
     <Folder Include="Parsing\Hand\" />
-    <Folder Include="Math\" />
+    <Folder Include="Mathematics\" />
   </ItemGroup>
 </Project>

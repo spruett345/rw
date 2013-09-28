@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Linq;
 using System.Collections.Generic;
 using Rw.Mathematics;
+using Rw.Evaluation;
 
 namespace Rw
 {
@@ -26,7 +27,6 @@ namespace Rw
 
             var gcd = IntegerMath.GreatestCommonDivisor(Numerator * Numerator.Sign, 
                                                         Denominator * Denominator.Sign);
-
 
 
             var den = Denominator * Denominator.Sign / gcd;
@@ -57,7 +57,7 @@ namespace Rw
         {
             get
             {
-                return TypeClass.Integer;
+                return TypeClass.Number;
             }
         }
 
@@ -74,7 +74,7 @@ namespace Rw
         {
             return true;
         }
-        public override bool TryEvaluate(Rw.Evaluation.Lookup rules, out Expression evaluated)
+        public override bool TryEvaluate(Lookup rules, out Expression evaluated)
         {
             return Simplify(out evaluated);
         }

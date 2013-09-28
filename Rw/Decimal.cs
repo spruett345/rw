@@ -35,7 +35,7 @@ namespace Rw
         {
             get
             {
-                return TypeClass.Decimal;
+                return TypeClass.Number;
             }
         }
 
