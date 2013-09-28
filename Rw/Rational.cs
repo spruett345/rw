@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using System.Linq;
 using System.Collections.Generic;
+using Rw.Mathematics;
 
 namespace Rw
 {
@@ -16,6 +17,33 @@ namespace Rw
         {
             Numerator = numerator;
             Denominator = denominator;
+            ComputedHash = ComputeHash();
+        }
+
+        private bool Simplify(out Expression value)
+        {
+            int sign = Numerator.Sign * Denominator.Sign;
+
+            var gcd = IntegerMath.GreatestCommonDivisor(Numerator * Numerator.Sign, 
+                                                        Denominator * Denominator.Sign);
+
+
+
+            var den = Denominator * Denominator.Sign / gcd;
+            var num = Numerator * Numerator.Sign / gcd;
+            if (den == 1)
+            {
+                value = new Integer(num, Kernel);
+                return true;
+            }
+
+            if (gcd == 1)
+            {
+                value = null;
+                return false;
+            }
+            value = new Rational(num, den, Kernel);
+            return true;
         }
 
         public override string Head
@@ -46,7 +74,10 @@ namespace Rw
         {
             return true;
         }
-
+        public override bool TryEvaluate(Rw.Evaluation.Lookup rules, out Expression evaluated)
+        {
+            return Simplify(out evaluated);
+        }
         public override Expression Apply(params Expression[] arguments)
         {
             var args = new List<Expression>();

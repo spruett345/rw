@@ -13,6 +13,8 @@ def sin(0) :=
 def cos(0) :=
 	1
 
+def numerator(_ : rational(n, d)) := n
+def denominator(_ : rational(n, d)) := d
 
 def d(_ : const(x), x : sym) :=
 	0
@@ -51,4 +53,4 @@ def sqrt(x) := x^(1/2)
 def a * a^-1 := 1
 
 def (a * b)^c := a^c * b^c
-def (a^b)^c := a^(b*c )
+def (a^b)^c := a^(b*c)

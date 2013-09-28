@@ -31,6 +31,7 @@ namespace Rw.Matching
         public override void Bind(Expression exp, MatchEnvironment env)
         {
             env.Bind(Name, BasePattern, exp);
+            BasePattern.Bind(exp, env);
         }
 
         public override bool RequiresLookahead()

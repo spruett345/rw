@@ -163,7 +163,13 @@ namespace Rw
                 Integer x = env["x"] as Integer;
                 Integer y = env["y"] as Integer;
 
-                if (y.Value < 0 || y.Value > int.MaxValue)
+                if (y.Value < 0 && y.Value > int.MinValue)
+                {
+                    int pow = (int)y.Value * -1;
+                    BigInteger val = BigInteger.Pow(x.Value, pow);
+                    return new Rational(1, val, this);
+                }
+                else if (y.Value < 0 || y.Value > int.MaxValue)
                 {
                     return null;
                 }
@@ -175,7 +181,12 @@ namespace Rw
 
                 return new Decimal(Math.Pow(x.Value, y.Value), this);
             });
+            MakeHardRule("x:rational * y:int", (env) => {
+                Rational rat = env["x"] as Rational;
+                Integer y = env["y"] as Integer;
 
+                return new Rational(rat.Numerator * y.Value, rat.Denominator, this);
+            });
             MakeHardRule("log(x:decimal)", (env) =>
                          new Decimal(Math.Log((env["x"] as Decimal).Value), this));
             MakeHardRule("sin(x:decimal)", (env) =>

@@ -68,17 +68,30 @@ namespace Rw.Parsing.Hand
         }
         private Pattern SpecialPattern(string head, IEnumerable<string> args)
         {
-            if (args.Count() != 1)
-            {
-                throw new ParseException("only special patterns of one argument exist at this time");
-            }
+
             if (head == "const")
             {
+                if (args.Count() != 1)
+                {
+                    throw new ParseException("only special patterns of one argument exist at this time");
+                }
                 return new ConstantPattern(args.First());
             }
             else if (head == "depends_on")
             {
+                if (args.Count() != 1)
+                {
+                    throw new ParseException("only special patterns of one argument exist at this time");
+                }
                 return new DependsOnPattern(args.First());
+            }
+            else if (head == "rational")
+            {
+                if (args.Count() != 2)
+                {
+                    throw new ParseException("rational pattern takes two arguments");
+                }
+                return new RationalPattern(args.ElementAt(0), args.ElementAt(1));
             }
             throw new ParseException("undefined special pattern with head " + head);
         }
