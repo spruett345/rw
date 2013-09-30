@@ -34,6 +34,14 @@ namespace Rw
         {
             return DecimalValue();
         }
+
+        private static void Multiply <T1, T2>(Number<T1> left, Number<T2> right)
+        {
+            if (T1 is Double || T2 is Double)
+            {
+                return new Decimal(left.DecimalValue().Value * right.DecimalValue().Value, left.Kernel);
+            }
+        }
     }
 }
 
