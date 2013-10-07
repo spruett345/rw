@@ -18,7 +18,10 @@ namespace Rw.Parsing.Hand
         };
 
         private static string[] Keywords = new string[] {
-            "let", "def", "when", "in"
+            "let", "def", "when", "in", "if", "then", "else"
+        };
+        private static string[] Literals = new string[] {
+            "true", "false", "pi", "e"
         };
 
         private int Index;
@@ -77,6 +80,11 @@ namespace Rw.Parsing.Hand
             if (ValidTokenStart(current))
             {
                 string id = ParseIdentifier(bldr);
+                if (Symbols.Contains(id))
+                {
+                    token = new Token(id, TokenType.Symbol);
+                    return true;
+                }
                 token = new Token(id, Keywords.Contains(id) ? 
                                   TokenType.Keyword : TokenType.Identifier
                 );

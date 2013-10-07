@@ -7,18 +7,17 @@ using Rw.Evaluation;
 
 namespace Rw
 {
-    public class Rational : Expression
+    public class Rational : Number
     {
         public readonly BigInteger Numerator;
         public readonly BigInteger Denominator;
 
         private int ComputedHash;
 
-        public Rational(BigInteger numerator, BigInteger denominator, Kernel kernel) : base(kernel)
+        public Rational(BigInteger num, BigInteger den, Kernel kernel) : base(kernel)
         {
-            Numerator = numerator;
-            Denominator = denominator;
-            ComputedHash = ComputeHash();
+            Numerator = num;
+            Denominator = den;
         }
 
         private bool Simplify(out Expression value)
@@ -46,6 +45,13 @@ namespace Rw
             return true;
         }
 
+        public override int Sign
+        {
+            get
+            {
+                return Numerator.Sign * Denominator.Sign;
+            }
+        }
         public override string Head
         {
             get
@@ -53,18 +59,7 @@ namespace Rw
                 return "rational";
             }
         }
-        public override TypeClass Type
-        {
-            get
-            {
-                return TypeClass.Number;
-            }
-        }
 
-        public override bool Negative()
-        {
-            return Numerator.Sign * Denominator.Sign < 0;
-        }
         public override Expression AsNonnegative()
         {
             return new Rational(Numerator * Numerator.Sign, Denominator * Denominator.Sign, Kernel);
@@ -86,7 +81,7 @@ namespace Rw
             return new Normal("multiply", Kernel, args.ToArray());
         }
 
-        public override Expression AsImprecise()
+        public override Decimal AsDecimal()
         {
             try
             {
@@ -124,6 +119,29 @@ namespace Rw
                     rat.Numerator == Numerator && rat.Denominator == Denominator;
             }
             return false;
+        }
+
+        public override Number Add(Integer integer)
+        {
+            return Add(integer.AsRational());
+        }
+        public override Number Multiply(Integer integer)
+        {
+            return Multiply(integer.AsRational());
+        }
+
+        public override Number Add(Rational rational)
+        {
+            BigInteger num = Numerator * rational.Denominator + Denominator * rational.Numerator;
+            BigInteger den = rational.Denominator * Denominator;
+
+            return new Rational(num, den, Kernel);
+        }
+        public override Number Multiply(Rational rational)
+        {
+            BigInteger num = rational.Numerator * Numerator;
+            BigInteger den = rational.Denominator * Denominator;
+            return new Rational(num, den, Kernel);
         }
     }
 }

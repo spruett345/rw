@@ -154,6 +154,70 @@ namespace Rw
             return base.AsNonnegative();
         }
 
+        private bool FoldConstants(out Expression reduced)
+        {
+            if (Head == "add")
+            {
+                return ReduceNumbers((x, y) => x.Add(y), out reduced);
+            }
+            if (Head == "multiply")
+            {
+                return ReduceNumbers((x, y) => x.Multiply(y), out reduced);
+            }
+            reduced = null;
+            return false;
+        }
+        private bool ReduceNumbers(Func<Number, Number, Number> fold, out Expression reduced)
+        {
+            IEnumerable<Expression> others;
+            var numbers = SelectNumbers(out others);
+            if (numbers.Count() >= 2)
+            {
+                var num = numbers.First();
+                foreach (var n in numbers.Skip(1))
+                {
+                    num = fold(num, n);
+                }
+                if (others.Count() == 0)
+                {
+                    reduced = num;
+                    return true;
+                }
+                else
+                {
+                    var prm = others.ToList();
+                    prm.Add(num);
+                    reduced = Create(prm.ToArray());
+                    return true;
+                }
+            }
+            else
+            {
+                reduced = null;
+                return false;
+            }
+        }
+        private IEnumerable<Number> SelectNumbers(out IEnumerable<Expression> other)
+        {
+            var numbers = new List<Number>();
+            var others = new List<Expression>();
+
+            foreach (var expr in this)
+            {
+                var num = expr as Number;
+                if (num != null)
+                {
+                    numbers.Add(num);
+                }
+                else
+                {
+                    others.Add(expr);
+                }
+            }
+            other = others;
+            return numbers;
+        
+        }
         /// <summary>
         /// Creates a new normal of the same type with the specific
         /// arguments.
@@ -171,7 +235,7 @@ namespace Rw
         {
             if (Attributes.HasFlag(NormalAttributes.Operator))
             {
-                throw new Exception("cannot apply an operator expression like a function. use * for multiply between parantheses");
+                throw new Exception("cannot apply an operator expression like a function. use * for multiply between parentheses");
             }
             var args = new List<Expression>();
             args.AddRange(Arguments);
@@ -194,6 +258,10 @@ namespace Rw
 
         public override bool TryEvaluate(Lookup rules, out Expression evaluated)
         {
+            if (FoldConstants(out evaluated))
+            {
+                return true;
+            }
             if (TryEvaluateInner(rules, out evaluated))
             {
                 return true;

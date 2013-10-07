@@ -1,10 +1,11 @@
 def not(true) := false;
 def not(false) := true;
 
-def if(true, x, y) :=
-	x
-def if(false, x, y) :=
-	y
+def true or _ := true;
+def false or x := x;
+
+def true and x := x;
+def false and _ := false;
 
 def log(1) :=
 	0

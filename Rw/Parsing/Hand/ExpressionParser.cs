@@ -23,6 +23,8 @@ namespace Rw.Parsing.Hand
             OperatorMappings[">="] = "gte";
             OperatorMappings["="] = "eq";
             OperatorMappings["!="] = "neq";
+            OperatorMappings["and"] = "and";
+            OperatorMappings["or"] = "or";
         }
 
         public ExpressionParser(Parser parser) : base(() => parser.Peek(false), () => parser.Take(false), parser.Kernel)

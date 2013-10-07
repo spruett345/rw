@@ -24,6 +24,8 @@ namespace Rw.Parsing.Hand
             OperatorMappings[">="] = "gte";
             OperatorMappings["="] = "eq";
             OperatorMappings["!="] = "neq";
+            OperatorMappings["and"] = "and";
+            OperatorMappings["or"] = "or";
         }
 
         public PatternParser(Parser parser) : base(() => parser.Peek(false), () => parser.Take(false), parser.Kernel)

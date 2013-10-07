@@ -1,23 +1,14 @@
 using System;
+using System.Collections.Generic;
 
 namespace Rw
 {
-    public abstract class Number<T> : NativeExpression<T> 
+    public abstract class Number : Expression
     {
-        public Number(T value, Kernel kernel) : base(value, kernel)
+        public Number(Kernel kernel) : base(kernel)
         {
 
         }
-
-        public abstract Decimal DecimalValue();
-        public virtual int Sign
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         public override TypeClass Type
         {
             get
@@ -26,21 +17,77 @@ namespace Rw
             }
         }
 
+        public abstract int Sign { get; }
+        public abstract Decimal AsDecimal();
+
+
         public override bool Negative()
         {
             return Sign < 0;
         }
         public override Expression AsImprecise()
         {
-            return DecimalValue();
+            return AsDecimal();
+        }
+        public override bool Numeric()
+        {
+            return true;
+        }
+        
+        public override Expression Apply(params Expression[] arguments)
+        {
+            var args = new List<Expression>();
+            args.Add(this);
+            args.AddRange(arguments);
+            return new Normal("multiply", Kernel, args.ToArray());
         }
 
-        private static void Multiply <T1, T2>(Number<T1> left, Number<T2> right)
+        public virtual int Compare(Number other)
         {
-            if (T1 is Double || T2 is Double)
+            return AsDecimal().Value.CompareTo(other.AsDecimal().Value);
+        }
+
+        public virtual Number Multiply(Number other)
+        {
+            Integer integer = other as Integer;
+            if (integer != null)
             {
-                return new Decimal(left.DecimalValue().Value * right.DecimalValue().Value, left.Kernel);
+                return Multiply(integer);
             }
+            Rational rational = other as Rational;
+            if (rational != null)
+            {
+                return Multiply(rational);
+            }
+            Decimal dec = other.AsDecimal();
+            return Multiply(dec);
+        }
+        public virtual Number Add(Number other)
+        {
+            Integer integer = other as Integer;
+            if (integer != null)
+            {
+                return Add(integer);
+            }
+            Rational rational = other as Rational;
+            if (rational != null)
+            {
+                return Add(rational);
+            }
+            Decimal dec = other.AsDecimal();
+            return Add(dec);
+        }
+        public abstract Number Multiply(Integer integer);
+        public abstract Number Multiply(Rational rational);
+        public virtual Number Multiply(Decimal dec)
+        {
+            return AsDecimal().Multiply(dec);
+        }
+        public abstract Number Add(Integer integer);
+        public abstract Number Add(Rational rational);
+        public virtual Number Add(Decimal dec)
+        {
+            return AsDecimal().Add(dec);
         }
     }
 }

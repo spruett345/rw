@@ -8,7 +8,7 @@ namespace Rw
     /// Imprecise floating point decimal type expression.
     /// Internally uses 128-bit decimals for maximum precision.
     /// </summary>
-    public class Decimal : Expression
+    public class Decimal : Number
     {
         /// <summary>
         /// The value of this Decimal expression as a system
@@ -31,19 +31,7 @@ namespace Rw
                 return "decimal";
             }
         }
-        public override TypeClass Type
-        {
-            get
-            {
-                return TypeClass.Number;
-            }
-        }
-
-        public override bool Negative()
-        {
-            return Value < 0;
-        }
-
+       
         public override Expression AsNonnegative()
         {
             return new Decimal(Value < 0 ? Value * -1 : Value, Kernel);
@@ -53,21 +41,13 @@ namespace Rw
             return Value.ToString();
         }
 
-        public override bool Numeric()
+        public override Decimal AsDecimal()
         {
-            return true;
+            return this;
         }
         public override bool Imprecise()
         {
             return true;
-        }
-
-        public override Expression Apply(params Expression[] arguments)
-        {
-            var args = new List<Expression>();
-            args.Add(this);
-            args.AddRange(arguments);
-            return new Normal("multiply", Kernel, args.ToArray());
         }
 
         private int ComputeHash()
@@ -93,6 +73,47 @@ namespace Rw
                 return i.Equals(this);
             }
             return false;
+        }
+
+        public override int Sign
+        {
+            get
+            {
+                if (Value < 0)
+                {
+                    return -1;
+                }
+                else if (Value == 0)
+                {
+                    return 0;
+                }
+                return 1;
+            }
+        }
+
+        public override Number Multiply(Decimal dec)
+        {
+            return new Decimal(Value * dec.Value, Kernel);
+        }
+        public override Number Multiply(Integer integer)
+        {
+            return Multiply(integer.AsDecimal());
+        }
+        public override Number Multiply(Rational rational)
+        {
+            return Multiply(rational.AsDecimal());
+        }
+        public override Number Add(Decimal dec)
+        {
+            return new Decimal(Value + dec.Value, Kernel);
+        }
+        public override Number Add(Integer integer)
+        {
+            return Add(integer.AsDecimal());
+        }
+        public override Number Add(Rational rational)
+        {
+            return Add(rational.AsDecimal());
         }
     }
 }

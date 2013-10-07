@@ -85,7 +85,7 @@ namespace Rw.Parsing.Hand
                 }
                 else if (start.Value == "if")
                 {
-
+                    return ParseIfExpression();
                 }
             }
             else if (start.Value == "\\")
@@ -176,6 +176,16 @@ namespace Rw.Parsing.Hand
             return Expect(true, vals);
         }
 
+        private Expression ParseIfExpression()
+        {
+            var condition = ParseExpression();
+            Expect("then");
+            var trueExpression = ParseExpression();
+            Expect("else");
+            var falseExpression = ParseExpression();
+
+            return new Normal("if", Kernel, trueExpression, falseExpression);
+        }
         private Expression ParseLetExpression()
         {
 

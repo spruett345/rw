@@ -42,6 +42,14 @@ namespace Rw.Mathematics
             }
             return GreatestCommonDivisor((y - x) / 2, x);
         }
+        public static BigInteger LeastCommonMultiple(BigInteger x, BigInteger y)
+        {
+            return (x * y) / GreatestCommonDivisor(x, y);
+        }
+        public static int LeastCommonMultiple(int x, int y)
+        {
+            return (x * y) / GreatestCommonDivisor(x, y);
+        }
     }
 }
 
