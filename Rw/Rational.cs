@@ -41,7 +41,7 @@ namespace Rw
                 value = null;
                 return false;
             }
-            value = new Rational(num, den, Kernel);
+            value = new Rational(num * sign, den, Kernel);
             return true;
         }
 

@@ -79,6 +79,8 @@
     <Compile Include="Mathematics\IntegerMath.cs" />
     <Compile Include="NativeExpression.cs" />
     <Compile Include="Number.cs" />
+    <Compile Include="Collections\ImmutableList.cs" />
+    <Compile Include="List.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -87,5 +89,6 @@
     <Folder Include="Evaluation\" />
     <Folder Include="Parsing\Hand\" />
     <Folder Include="Mathematics\" />
+    <Folder Include="Collections\" />
   </ItemGroup>
 </Project>
