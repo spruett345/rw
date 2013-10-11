@@ -127,16 +127,7 @@ namespace Rw
             NormalAttributes["tan"] = Rw.NormalAttributes.Numeric | Rw.NormalAttributes.Protected;
         }
         private void LoadHardRules()
-        {
-            MakeHardRule("x:int + y:int", (env) =>
-                         new Integer((env["x"] as Integer).Value + (env["y"] as Integer).Value, this));
-            MakeHardRule("x:decimal + y:decimal", (env) =>
-                         new Decimal((env["x"] as Decimal).Value + (env["y"] as Decimal).Value, this));
-
-            MakeHardRule("x:int * y:int", (env) =>
-                         new Integer((env["x"] as Integer).Value * (env["y"] as Integer).Value, this));
-            MakeHardRule("x:decimal * y:decimal", (env) =>
-                         new Decimal((env["x"] as Decimal).Value * (env["y"] as Decimal).Value, this));
+        {          
 
             MakeHardRule("x:int > y:int", (env) =>
                          new Boolean((env["x"] as Integer).Value > (env["y"] as Integer).Value, this));
@@ -159,6 +150,8 @@ namespace Rw
             MakeHardRule("x:decimal = y:decimal", (env) =>
                          new Boolean((env["x"] as Decimal).Value == (env["y"] as Decimal).Value, this));
 
+            MakeHardRule("cons(x, y:list)", (env) =>
+                         (env["y"] as List).Prepend(env["x"]));
             MakeHardRule("x:int ^ y:int", (env) => {
                 Integer x = env["x"] as Integer;
                 Integer y = env["y"] as Integer;
@@ -180,12 +173,6 @@ namespace Rw
                 Decimal y = env["y"] as Decimal;
 
                 return new Decimal(Math.Pow(x.Value, y.Value), this);
-            });
-            MakeHardRule("x:rational * y:int", (env) => {
-                Rational rat = env["x"] as Rational;
-                Integer y = env["y"] as Integer;
-
-                return new Rational(rat.Numerator * y.Value, rat.Denominator, this);
             });
             MakeHardRule("log(x:decimal)", (env) =>
                          new Decimal(Math.Log((env["x"] as Decimal).Value), this));

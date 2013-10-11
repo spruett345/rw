@@ -1,6 +1,16 @@
 def not(true) := false;
 def not(false) := true;
 
+def length([]) := 0
+def length(x::xs) := 1 + length(xs)
+
+def range(a, b) when b < a := range(b, a)
+def range(a, a) := []
+def range(a, b) when a < b := a :: range(a+1, b)
+
+def x = x := true
+def x != x := false
+
 def true or _ := true;
 def false or x := x;
 

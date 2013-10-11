@@ -10,6 +10,7 @@ namespace Rw.Collections
 
         public readonly ImmutableList<T> Tail;
         public readonly T Value;
+        public readonly int Size;
 
         public ImmutableList(IEnumerable<T> collection)
         {
@@ -19,21 +20,25 @@ namespace Rw.Collections
                 stack.Push(element);
             }
             Tail = Empty;
-            while (stack.Count > 0)
+            while (stack.Count > 1)
             {
                 Tail = Tail.Prepend(stack.Pop());
             }
+            Value = stack.Pop();
+            Size = Tail.Size + 1;
         }
 
         private ImmutableList()
         {
             Value = default(T);
             Tail = null;
+            Size = 0;
         }
         private ImmutableList(T value, ImmutableList<T> tail)
         {
             Value = value;
             Tail = tail;
+            Size = tail.Size + 1;
         }
 
         private bool IsLast()

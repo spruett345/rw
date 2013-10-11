@@ -14,7 +14,8 @@ namespace Rw.Parsing.Hand
     {
         private static string[] Symbols = new string[] {
             "+", "-", "/", "*", "^", ">", "<", ">=", "<=", "\\",
-            "=", "!=", "and", "or", ":=", ";", "(", ")", ",", "->", ":"
+            "=", "!=", "and", "or", ":=", ";", "(", ")", ",", "->", ":", "::",
+            "[", "]"
         };
 
         private static string[] Keywords = new string[] {

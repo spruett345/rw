@@ -22,6 +22,7 @@ namespace Rw.Parsing.Hand
         {
             Operators = new Dictionary<string, Operator>();
 
+            AddOperator("::", 1, true, false);
             AddOperator("and", 0);
             AddOperator("or", 0);
 
@@ -123,18 +124,24 @@ namespace Rw.Parsing.Hand
             }
             else if (token.Value == ",")
             {
-                PopWhile(() => OperatorStack.Peek() != "(");
+                PopWhile(() => OperatorStack.Peek() != "(" && OperatorStack.Peek() != "[");
             }
-            else if (token.Value == "(")
+            else if (token.Value == "(" || token.Value == "[")
             {
+                if (token.Value == "[")
+                {
+                    OperatorStack.Push("list");
+                    ExpressionStack.Push(null);
+                }
                 OperatorStack.Push("(");
+
             }
-            else if (token.Value == ")")
+            else if (token.Value == ")" || token.Value == "]")
             {
                 PopWhile(() => OperatorStack.Peek() != "(");
                 if (OperatorStack.Count == 0)
                 {
-                    throw new ParseException("mismatched parantheses, found extra ')'");
+                    throw new ParseException("mismatched parantheses, found extra '" + token.Value + "'");
                 }
                 OperatorStack.Pop();
                 if (OperatorStack.Count > 0 && !IsOperator(OperatorStack.Peek()))
@@ -142,6 +149,7 @@ namespace Rw.Parsing.Hand
                     ExpressionStack.Push(PopFunction());
                 }
             }
+
             else if (IsOperator(token.Value))
             {
                 if (token.Value == "-" && (LastToken.Value == "(" || IsOperator(LastToken.Value) || LastToken.Type == TokenType.None))
@@ -188,7 +196,7 @@ namespace Rw.Parsing.Hand
             }
             if (Peek().Value == ",")
             {
-                return OperatorStack.Contains("(");
+                return OperatorStack.Contains("(") || OperatorStack.Contains("[");
             }
             if (Peek().Value == ";")
             {
@@ -320,7 +328,17 @@ namespace Rw.Parsing.Hand
             args.Reverse();
             return CreateFunction(CreateSymbol(head), args);
         }
-
+        protected virtual T PopList()
+        {
+            var args = new List<T>();
+            while (ExpressionStack.Peek() != null)
+            {
+                args.Add(ExpressionStack.Pop());
+            }
+            ExpressionStack.Pop();
+            args.Reverse();
+            return CreateFunction(CreateSymbol("list"), args);
+        }
         protected abstract T CreateSymbol(string id);
         protected abstract T CreateLiteral(Expression literal);
         protected abstract T CreateFunction(T head, IEnumerable<T> args);

@@ -72,6 +72,17 @@ namespace Rw.Parsing.Hand
                 return new Normal("add", Parser.Kernel, left, 
                                   new Normal("multiply", Parser.Kernel, right, new Integer(-1, Parser.Kernel)));
             }
+            else if (op == "::")
+            {
+                var left = args.First();
+                var right = args.ElementAt(1);
+                var list = right as List;
+                if (list != null)
+                {
+                    return list.Prepend(left);
+                }
+                return new Normal("cons", Kernel, new Expression[] { left, right });
+            }
             else if (OperatorMappings.ContainsKey(op))
             {
                 var left = args.First();
@@ -82,6 +93,14 @@ namespace Rw.Parsing.Hand
         }
         protected override Expression CreateFunction(Expression head, IEnumerable<Expression> args)
         {
+            Symbol sym = head as Symbol;
+            if (sym != null)
+            {
+                if (sym.Name == "list")
+                {
+                    return new List(Kernel, args);
+                }
+            }
             return head.Apply(args.ToArray());
         }
     }

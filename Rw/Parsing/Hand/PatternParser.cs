@@ -70,7 +70,6 @@ namespace Rw.Parsing.Hand
         }
         private Pattern SpecialPattern(string head, IEnumerable<string> args)
         {
-
             if (head == "const")
             {
                 if (args.Count() != 1)
@@ -122,6 +121,12 @@ namespace Rw.Parsing.Hand
                 return new Normal("add", Parser.Kernel, left, 
                                   new Normal("multiply", Parser.Kernel, right, new Integer(-1, Parser.Kernel)));
             }*/
+            if (op == "::")
+            {
+                var head = args.First();
+                var tail = args.ElementAt(1);
+                return new ConsPattern(head, tail);
+            }
             if (OperatorMappings.ContainsKey(op))
             {
                 var left = args.First();
@@ -135,6 +140,7 @@ namespace Rw.Parsing.Hand
             }
             throw new ParseException("unknown operator " + op + " in pattern");
         }
+
         protected override Pattern CreateFunction(Pattern head, IEnumerable<Pattern> args)
         {
             BoundPattern bound = head as BoundPattern;

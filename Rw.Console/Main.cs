@@ -31,7 +31,7 @@ namespace Rw.Console
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(" >>> " + ex.Message);
+                    Console.WriteLine(" >>> " + ex.ToString());
                 }
                 /*try
                 {

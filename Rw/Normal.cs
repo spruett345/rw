@@ -18,7 +18,7 @@ namespace Rw
         private readonly string FunctionHead;
         private readonly Expression[] Arguments;
 
-        private readonly int ComputedHash;
+        protected int ComputedHash;
         private readonly bool IsNumeric;
 
         public readonly NormalAttributes Attributes;
@@ -346,14 +346,14 @@ namespace Rw
             bldr.Append(Head);
             bldr.Append('(');
 
-            if (Arguments.Length > 0)
+            if (this.Count() > 0)
             {
-                bldr.Append(Arguments[0].FullForm());
+                bldr.Append(this.First().FullForm());
             }
-            for (int i = 1; i < Arguments.Length; i++)
+            foreach (var expr in this.Skip(1))
             {
                 bldr.Append(", ");
-                bldr.Append(Arguments[i].FullForm());
+                bldr.Append(expr.FullForm());
             }
             bldr.Append(")");
             return bldr.ToString();
@@ -368,14 +368,14 @@ namespace Rw
             bldr.Append(Head);
             bldr.Append('(');
 
-            if (Arguments.Length > 0)
+            if (this.Count() > 0)
             {
-                bldr.Append(Arguments[0].PrettyForm());
+                bldr.Append(this.First().PrettyForm());
             }
-            for (int i = 1; i < Arguments.Length; i++)
+            foreach (var expr in this.Skip(1))
             {
                 bldr.Append(", ");
-                bldr.Append(Arguments[i].PrettyForm());
+                bldr.Append(expr.PrettyForm());
             }
             bldr.Append(")");
             return bldr.ToString();

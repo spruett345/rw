@@ -81,6 +81,7 @@
     <Compile Include="Number.cs" />
     <Compile Include="Collections\ImmutableList.cs" />
     <Compile Include="List.cs" />
+    <Compile Include="Matching\ConsPattern.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
